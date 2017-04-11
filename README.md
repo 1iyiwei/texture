@@ -4,8 +4,8 @@
 ![->](https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/U%2B2192.svg/25px-U%2B2192.svg.png)
 ![output](./data/161_119x131.jpg)
 
-This is the latest texture synthesis code I wrote around 2014.
-The goal is designed for simplicity and reasonably good quality, so I have not attemped to incorporate the state-of-art algorithms or to optimize memory or speed.
+This is the (latest?) texture synthesis code I wrote around 2014.
+The goal is simplicity and reasonably good quality, so I have not attempted to incorporate the state-of-art algorithms or to optimize memory or speed.
 
 ## Build ##
 

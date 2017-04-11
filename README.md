@@ -13,7 +13,7 @@ As a combination of multi-resolution (Fast Texture Synthesis using Tree-structur
 
 ## Build ##
 
-Go to the build folder, and run cmake from there.
+Go to the build folder, and cmake [CMakeLists.txt](./CMakeLists.txt).
 
 ## Run ##
 

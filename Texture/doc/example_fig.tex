@@ -1,0 +1,25 @@
+\begin{figure}[htb]
+  \centering
+  \subfloat[raster]{
+    \label{fig:example:raster}
+    \includegraphics[width=0.4\linewidth]{161.jpg}
+  }%subfloat
+  \subfloat[vector]{
+    \label{fig:example:svg}
+    \includegraphics[width=0.58\linewidth]{figs/handdrawn/example.pdf}
+  }%subfloat
+  
+  \subfloat[vector + raster]{
+    \label{fig:example:svg_img}
+    \includegraphics[width=0.9\linewidth]{svg_img_example.pdf}
+  }%subfloat
+ \Caption{Example figure.}
+ {%
+\subref{fig:example:raster} is a raster image and \subref{fig:example:svg} is a vector graphics.
+Never, ever, rasterize vector graphics unless you want large size and low quality files.
+We can also combine vector and raster graphics as in \subref{fig:example:svg_img}.
+Use Inkscape to import  an image into an svg file, and draw over it using whatever stuff like texts or strokes.
+Make sure the image is linked not embedded to avoid duplicating the image, and the link should be relative in the same path \cite{StackExchange:2011:HLI}.
+ }
+ \label{fig:example}
+\end{figure}

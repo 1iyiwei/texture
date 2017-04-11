@@ -1,0 +1,25 @@
+\begin{algorithm}
+  \begin{algorithmic}[1]
+    \REQUIRE sample domain $\domainsym$ with distance $\dist$ and conflict $\conflictdist$ measure
+    \ENSURE output sample set $\sampleset$
+    \STATE $\sampleset \assign \emptyset$
+    \STATE $\failure \assign 0$ \pcomment{failure count}
+    \WHILE{$\domainsym$ is not fully covered and $\failure$ not too high}
+    \STATE $\sample \assign \funct{RandomSample}(\domainsym)$
+    \IF{$\dist(\sample, \sampleprime) < \conflictdist(\sample, \sampleprime) \; \forall \sampleprime \in \sampleset$}
+    \STATE $\sampleset \assign \sampleset \union \sample$ \pcomment{accept trial sample}
+    \STATE $\failure \assign 0$
+    \ELSE
+    \STATE $\failure \assign \failure + 1$
+    \ENDIF
+    \ENDWHILE
+    \RETURN{} $\sampleset$
+  \end{algorithmic}
+  \Caption{Dart throwing.}
+  {%
+This is an example of pseudo-code.
+  }
+  \label{alg:dart_throw}
+\end{algorithm}
+
+

@@ -1,0 +1,76 @@
+
+%% the following commands are plagiarized from Ravi
+\newcommand{\pcline }{\rule{0in}{0.0in}    }  % Spacing for pseudo-code.
+\newcommand{\pctab  }{\hspace{0.10in}      }  % Pseudo-code indentation.
+\newcommand{\pcbigtab  }{\hspace{1.75in}    }  % Pseudo-code indentation.
+\newcommand{\pcasgn }{\mbox{$\leftarrow$}  }  % Pseudo-code assignment operator
+%%\newcommand{\pcgreater}{\mbox{$\leftarrow$} } % Pseudo-code bigger operator
+\newcommand{\pcomment}[1]{\mbox{// {\it #1}}}  % Pseudo-code comments.
+\newcommand{\pckeyword}[1]{\mbox{{\bf #1}}}  % Pseudo-code keywords.
+\newcommand{\pcspace}{\hspace{0.10in}}
+
+\newcommand{\pcode}[1]{
+    \footnotesize
+    \vspace{-0.1in}
+    \begin{minipage}{100in} % The width argument will be ignored:
+                            % See lamport p. 99
+    \begin{tabbing} \hspace{0.10in} \= \pctab \= \pctab \= \pctab \= \pcbigtab \= \\
+        #1
+    \end{tabbing}
+    \end{minipage}
+%    \vspace{0.15in}
+    }
+%% enf of the pseudo code environment
+
+\newcommand{\tabtextsize}{\small}
+\newcommand{\figtext}[1]{{\footnotesize #1}}
+%%\newcommand{\Caption}[1]{\caption{\small {\em #1}}}
+%%\newcommand{\Caption}[1]{\caption{{\em #1}}}
+\newcommand{\Caption}[2]{\caption[#1]{{\footnotesize #1} {\footnotesize #2}}}
+%%\newcommand{\Caption}[1]{\caption{\it \small {#1}}}
+
+\newcommand{\invisible}[1]{{\color{white} #1}}
+\newcommand{\emacsquote}[1]{{``#1''}}
+
+\definecolor{SithColor}{rgb}{0.7,0,0} % color for Sith
+\newcommand{\liyi}[1]{{\color{SithColor} Li-Yi: #1 $\qed$}}
+\definecolor{ConsularColor}{rgb}{0,0.4,0} % color for the Jedi Consulars (e.g. Yoda)
+\definecolor{GuardianColor}{rgb}{0,0,0.8} % color for the Jedi Guardians (e.g. Obiwan)
+\newcommand{\obiwan}[1]{{\color{GuardianColor} Obiwan: #1 $\qed$}}
+\newcommand{\yoda}[1]{{\color{ConsularColor} Yoda: #1 $\qed$}}
+\newcommand{\warning}[1]{{\it\color{red} #1}}
+\newcommand{\note}[1]{{\it\color{blue} #1}}
+\newcommand{\nothing}[1]{}
+\newcommand{\passthrough}[1]{#1}
+\definecolor{AudioColor}{rgb}{0.56,0.34,0.62}
+\newcommand{\audio}[1]{{\color{AudioColor} Audio: #1}}
+
+\newcommand{\psdraftboxDefault}{\psnodraftbox}
+
+\definecolor{figred}{rgb}{1,0,0}
+\definecolor{figgreen}{rgb}{0,0.6,0}
+\definecolor{figblue}{rgb}{0,0,1}
+\definecolor{figpink}{rgb}{1,0.63,0.63}
+
+%\renewcommand{\warning}[1]{}
+
+\ifthenelse{\equal{\final}{1}}
+{
+\renewcommand{\liyi}[1]{}
+\renewcommand{\obiwan}[1]{}
+\renewcommand{\yoda}[1]{}
+\renewcommand{\warning}[1]{}
+\renewcommand{\note}[1]{}
+}
+{}
+
+\newcommand{\pseudocode}{Algorithm}
+\floatstyle{plain}
+\newfloat{algorithm}{tbhp}{lop}
+\floatname{algorithm}{\pseudocode}
+
+\newcommand{\funct}[1]{\texttt{#1}}
+
+\newcommand{\filename}[1]{\url{#1}}
+\newcommand{\foldername}[1]{\url{#1}}
+\newcommand{\email}[1]{\url{#1}}

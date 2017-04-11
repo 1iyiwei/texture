@@ -1,0 +1,29 @@
+\section{Method}
+\label{sec:method}
+
+Written words are more concrete than ideas in your head.
+Math equations and pseudo-codes are even more concrete than words, and can help, even though not essential, for exposition.
+Programs that produce the actual results are the most concrete, but the amount and level of information is not suitable for a research paper.
+I like to write down math and pseudo-code first as a way to design the algorithms before actual implementation.
+
+\subsection{Math}
+\label{sec:math}
+
+\begin{align}
+\energy = \mass \lightspeed^2
+\label{eqn:emc2}
+\end{align}
+
+Always use defined instead of naked math symbols for clarify and consistency.
+For example, in \Cref{eqn:emc2} I define all symbols inside \filename{symbols.tex} so later if I need to change $\energy$ from $E$ to $e$ I just need to change one line in \filename{symbols.tex} instead of chasing $E$ everywhere.
+This can save you a lot of time and sanity if you have many math symbols.
+
+\subsection{Code}
+\label{sec:code}
+
+\input{dart_throw_alg}
+
+Pseudo-code can help summarize and explain the algorithms, but only if presented with sufficient clarity and simplicity. 
+\Cref{alg:dart_throw} is an example.
+All algorithms should be understandable from the main texts without looking at the pseudo-codes, which are usually more suitable for summarization than explanation.
+

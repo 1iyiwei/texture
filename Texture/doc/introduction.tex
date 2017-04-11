@@ -1,0 +1,55 @@
+\section{Introduction}
+
+\note{
+What problem we are trying to solve.
+Why it is important, and why people should care.
+}%note
+
+Writing research documents, such as conference/journal/white papers, patent applications, grant proposals, and course reports, is a core activity for many poor souls including professors, researchers, engineers, and students.
+Since we must do it one way or another, sooner or later, we might as well do it as happily and effectively as possible.
+Here are my personal practices and experiences, which I have repeatedly shared with my collaborators and students throughout all these years\note{~to the point that I finally decided to write up to save the troubles}.
+
+\note{
+What prior works have done, and why they are not adequate.
+(Note: this is just high level big ideas. Details should go to a previous work section.)
+}%note
+
+Some people, including very successful ones, write papers only at the end of a project, like days if not hours prior to a submission deadline.
+This almost always leads to total chaos and breakdown, unless you have other means to keep track and organize all the relevant pieces of information.
+
+\note{
+What our method has to offer, sales pitch for concrete benefits, not technical details.
+Imagine we are doing a TV advertisement here.
+}%note
+
+This document provides a template for writing research papers, and describes how to manage project progress via iterating drafts.
+Doing this correctly can help you achieve productive research and happy life, e.g. working anywhere anytime without synchronous meetings with your collaborators.
+
+\note{
+Our main idea, giving people a take home message and (if possible) see how clever we are.
+}%note
+
+I learned from my PhD adviser to start writing from the moment I have the faintest idea, and gradually update the drafts to reflect progress.
+During my first job with NVIDIA, I learned why and how revision control is essential for sharing and editing source files, especially among large engineering teams.
+The iterative nature of writing and coding matches well with the capability of revision control.
+Thus I prefer Latex + git/svn (e.g. github, bitbucket, and the svn server under my hosting service), even though I can still manage with MS Word + cloud drive (e.g. Google drive, Box, and Dropbox). 
+A good computer scientist writes papers like programs, and manages Latex files like source codes.
+These repos are external memories and communication mediums for the collective brains of my teams.
+
+\note{
+Our algorithms and methods to show technical contributions and that our solutions are not trivial.
+}%note
+
+\input{example_fig}
+
+Translating thoughts into words, diagrams, equations, pseudo-codes, or codes is a good way to clarify and consolidate.
+If you are writing a graphics/HCI paper, design the figures so that they alone can provide a high level picture of the main points.
+As exemplified in \Cref{fig:example}, a figure can contain images, drawings, or combinations. 
+
+\note{
+Results, applications, and extra benefits.
+}%note
+
+You can use the associated files as a starting template for your research papers.
+Start with the \filename{Makefile}, and notice the two build targets: final for official submission and public disclosure, and draft for internal sharing among your collaborators (including yourself).
+

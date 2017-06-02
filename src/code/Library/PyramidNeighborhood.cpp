@@ -13,7 +13,7 @@ using namespace std;
 #include "PlainNeighborhood.hpp"
 #include "Exception.hpp"
 
-PyramidNeighborhood::PyramidNeighborhood(const TexturePyramid & pyramid, const PyramidDomain & pyramid_domain, const vector<TemplatePtr> & templars, const Domain & domain) : Neighborhood(domain), _pyramid(pyramid), _pyramid_domain(pyramid_domain), _templars(templars)
+PyramidNeighborhood::PyramidNeighborhood(const TexturePyramid & pyramid, const PyramidDomain & pyramid_domain, const vector<TemplarPtr> & templars, const Domain & domain) : Neighborhood(domain), _pyramid(pyramid), _pyramid_domain(pyramid_domain), _templars(templars)
 {
 #if 0 // no need
     if(static_cast<unsigned int>(_pyramid.Size() + 1) != _templars.size())

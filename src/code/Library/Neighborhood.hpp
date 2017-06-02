@@ -11,14 +11,14 @@
 #ifndef _NEIGHBORHOOD_HPP
 #define _NEIGHBORHOOD_HPP
 
-#include "Template.hpp"
+#include "Templar.hpp"
 #include "Domain.hpp"
 #include "Texture.hpp"
 
 class Neighborhood
 {
 public:
-    typedef Template::Weight Weight;
+    typedef Templar::Weight Weight;
 
     struct Neighbor
     {

@@ -1,15 +1,15 @@
 /*
-  CausalTemplate.cpp
+  CausalTemplar.cpp
 
   Li-Yi Wei
   August 21, 2014
 
 */
 
-#include "CausalTemplate.hpp"
+#include "CausalTemplar.hpp"
 
 
-CausalTemplate::CausalTemplate(const Template & source)
+CausalTemplar::CausalTemplar(const Templar & source)
 {
     Position offset;
     Weight weight;
@@ -30,12 +30,12 @@ CausalTemplate::CausalTemplate(const Template & source)
     }
 }
 
-CausalTemplate::~CausalTemplate(void)
+CausalTemplar::~CausalTemplar(void)
 {
     // nothing else to do
 }
 
-bool CausalTemplate::IsCausal(const Position & position)
+bool CausalTemplar::IsCausal(const Position & position)
 {
     for(unsigned int i = 0; i < position.size(); i++)
     {

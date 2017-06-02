@@ -9,7 +9,7 @@
 #include "PlainNeighborhood.hpp"
 #include "Exception.hpp"
 
-PlainNeighborhood::PlainNeighborhood(const Template & templar, const Domain & domain) : Neighborhood(domain), _templar(templar)
+PlainNeighborhood::PlainNeighborhood(const Templar & templar, const Domain & domain) : Neighborhood(domain), _templar(templar)
 {
     // nothing else to do
 }

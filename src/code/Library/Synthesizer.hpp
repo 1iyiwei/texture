@@ -28,7 +28,7 @@ public:
 
 protected:
     typedef Range::DistType DistType;
-    typedef Template::Weight Weight;
+    typedef Templar::Weight Weight;
 
     DistType Distance2(const vector<Neighborhood::Neighbor> & foo, const vector<Neighborhood::Neighbor> & bar) const;
 

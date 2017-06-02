@@ -1,16 +1,16 @@
 /*
-  SquareTemplate.cpp
+  SquareTemplar.cpp
 
   Li-Yi Wei
   August 21, 2014
 
 */
 
-#include "SquareTemplate.hpp"
+#include "SquareTemplar.hpp"
 #include "SequentialCounter.hpp"
 #include "Exception.hpp"
 
-SquareTemplate::SquareTemplate(const int dimension, const int half_size)
+SquareTemplar::SquareTemplar(const int dimension, const int half_size)
 {
     SequentialCounter counter(dimension, -half_size, half_size);
 
@@ -30,7 +30,7 @@ SquareTemplate::SquareTemplate(const int dimension, const int half_size)
     _weights = vector<Weight>(_offsets.size(), 1.0);
 }
 
-SquareTemplate::~SquareTemplate(void)
+SquareTemplar::~SquareTemplar(void)
 {
     // nothing else to do
 }

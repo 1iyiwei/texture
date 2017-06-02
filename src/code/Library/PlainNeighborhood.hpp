@@ -17,12 +17,12 @@ class PlainNeighborhood : public Neighborhood
 {
 public:
 
-    PlainNeighborhood(const Template & templar, const Domain & domain);
+    PlainNeighborhood(const Templar & templar, const Domain & domain);
     virtual ~PlainNeighborhood(void);
 
     virtual vector<Neighbor> Neighbors(const Texture & source, const Position & position) const;
 
 protected:
-    const Template & _templar;
+    const Templar & _templar;
 };
 #endif

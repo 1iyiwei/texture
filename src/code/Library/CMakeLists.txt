@@ -5,8 +5,8 @@ PROJECT(Library)
 ADD_LIBRARY(${PROJECT_NAME}
     Array.cpp
     Array.hpp
-    CausalTemplate.cpp
-    CausalTemplate.hpp
+    CausalTemplar.cpp
+    CausalTemplar.hpp
     CoherenceSynthesizer.cpp
     CoherenceSynthesizer.hpp
     Counter.cpp
@@ -55,12 +55,12 @@ ADD_LIBRARY(${PROJECT_NAME}
     Sequencer.hpp
     SequentialCounter.cpp
     SequentialCounter.hpp
-    SquareTemplate.cpp
-    SquareTemplate.hpp
+    SquareTemplar.cpp
+    SquareTemplar.hpp
     Synthesizer.cpp
     Synthesizer.hpp
-    Template.cpp
-    Template.hpp
+    Templar.cpp
+    Templar.hpp
     Texel.cpp
     Texel.hpp
     Texture.cpp

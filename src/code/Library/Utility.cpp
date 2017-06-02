@@ -15,8 +15,8 @@ using namespace std;
 
 #include "VectorRange.hpp"
 
-#include "SquareTemplate.hpp"
-#include "CausalTemplate.hpp"
+#include "SquareTemplar.hpp"
+#include "CausalTemplar.hpp"
 
 #include "ToroidalDomain.hpp"
 #include "PlainDomain.hpp"
@@ -141,23 +141,23 @@ string Utility::ReadPyramid(const string & pyramid_spec, TexturePyramidPtr & pyr
     return "";
 }
 
-shared_ptr<Template> Utility::BuildTemplate(const string & neighborhood_spec, const int dimension)
+shared_ptr<Templar> Utility::BuildTemplar(const string & neighborhood_spec, const int dimension)
 {
     const vector<int> values = ExtractIntegers(neighborhood_spec);
 
-    return BuildTemplate(neighborhood_spec, values, dimension);
+    return BuildTemplar(neighborhood_spec, values, dimension);
 }
 
-shared_ptr<Template> Utility::BuildTemplate(const string & neighborhood_spec, const vector<int> & values, const int dimension)
+shared_ptr<Templar> Utility::BuildTemplar(const string & neighborhood_spec, const vector<int> & values, const int dimension)
 {
-    shared_ptr<Template> templar;
+    shared_ptr<Templar> templar;
 
     if(neighborhood_spec.find("square") != string::npos)
     {
         if(values.size() == 1)
         {
             const int half_size = values[0];
-            templar.reset(new SquareTemplate(dimension, half_size));
+            templar.reset(new SquareTemplar(dimension, half_size));
         }
     }
     else if(neighborhood_spec.find("sphere") != string::npos)
@@ -166,7 +166,7 @@ shared_ptr<Template> Utility::BuildTemplate(const string & neighborhood_spec, co
         {
             const int radius = values[0];
             // not yet done
-            // templar.reset(new SphereTemplate(radius));
+            // templar.reset(new SphereTemplar(radius));
         }
     }
     else
@@ -193,14 +193,14 @@ shared_ptr<Domain> Utility::BuildDomain(const string & boundary_condition)
     return domain;
 }
 
-shared_ptr<Neighborhood> Utility::BuildNeighborhood(const Template & templar, const Domain & domain)
+shared_ptr<Neighborhood> Utility::BuildNeighborhood(const Templar & templar, const Domain & domain)
 {
     shared_ptr<Neighborhood> neighborhood(new PlainNeighborhood(templar, domain));
 
     return neighborhood;
 }
 
-shared_ptr<Neighborhood> Utility::BuildNeighborhood(const vector<TemplatePtr> & templars, const Domain & domain, const TexturePyramid & pyramid, const PyramidDomain & pyramid_domain)
+shared_ptr<Neighborhood> Utility::BuildNeighborhood(const vector<TemplarPtr> & templars, const Domain & domain, const TexturePyramid & pyramid, const PyramidDomain & pyramid_domain)
 {
     shared_ptr<Neighborhood> neighborhood(new PyramidNeighborhood(pyramid, pyramid_domain, templars, domain));
 
@@ -630,11 +630,11 @@ string Utility::SynthesizeOnce(const string & input_boundary, const string & out
 {
     // neighborhood
     const vector<string> neighborhood_specs = Split(neighborhood_spec, _LEVEL_SEPARATOR);
-    vector<TemplatePtr> templars;
+    vector<TemplarPtr> templars;
     for(unsigned int level = 0; level < neighborhood_specs.size(); level++)
     {
         const string & level_spec = neighborhood_specs[level];
-        TemplatePtr templar = BuildTemplate(level_spec, source.Dimension());
+        TemplarPtr templar = BuildTemplar(level_spec, source.Dimension());
         if(! templar)
         {
             return "unknown neighborhood: " + level_spec;
@@ -642,7 +642,7 @@ string Utility::SynthesizeOnce(const string & input_boundary, const string & out
 
         if((level == 0) && (sequence_spec.find("scanline") != string::npos))
         {
-            templar.reset(new CausalTemplate(*templar));
+            templar.reset(new CausalTemplar(*templar));
         }
 
         templars.push_back(templar);
@@ -701,13 +701,13 @@ string Utility::SynthesizeOnce(const string & input_boundary, const string & out
 
         if(values.size() > 0)
         {
-            vector<TemplatePtr> coherence_templars;
+            vector<TemplarPtr> coherence_templars;
             for(unsigned int i = 0; i < values.size(); i++)
             {
                 const int coherence_half_size = values[i];
                 const vector<int> template_values(1, coherence_half_size);
 
-                coherence_templars.push_back(BuildTemplate(neighborhood_specs[0], template_values, source.Dimension()));
+                coherence_templars.push_back(BuildTemplar(neighborhood_specs[0], template_values, source.Dimension()));
             }
  
             const shared_ptr<Domain> coherence_domain = BuildDomain(output_boundary);

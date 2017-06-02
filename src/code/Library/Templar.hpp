@@ -1,5 +1,5 @@
 /*
-  Template.hpp
+  Templar.hpp
 
   the base class for all neighborhood shape templates
 
@@ -8,8 +8,8 @@
 
 */
 
-#ifndef _TEMPLATE_HPP
-#define _TEMPLATE_HPP
+#ifndef _TEMPLAR_HPP
+#define _TEMPLAR_HPP
 
 #include <vector>
 #include <memory>
@@ -17,13 +17,13 @@ using namespace std;
 
 #include "Texel.hpp"
 
-class Template
+class Templar
 {
 public:
 
     typedef float Weight;
 
-    virtual ~Template(void) = 0;
+    virtual ~Templar(void) = 0;
 
     virtual int Size(void) const;
     virtual const Position & GetOffset(const int index) const;
@@ -37,5 +37,5 @@ protected:
     vector<Weight> _weights;
 };
 
-typedef shared_ptr<Template> TemplatePtr;
+typedef shared_ptr<Templar> TemplarPtr;
 #endif

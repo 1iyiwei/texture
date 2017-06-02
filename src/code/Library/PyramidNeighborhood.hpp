@@ -26,7 +26,7 @@ class PyramidNeighborhood : public Neighborhood
 public:
     // one templar per pyramid level and source
     // so (pyramid.Size()+1) == templars.size()
-    PyramidNeighborhood(const TexturePyramid & pyramid, const PyramidDomain & pyramid_domain, const vector<TemplatePtr> & templars, const Domain & domain);
+    PyramidNeighborhood(const TexturePyramid & pyramid, const PyramidDomain & pyramid_domain, const vector<TemplarPtr> & templars, const Domain & domain);
     virtual ~PyramidNeighborhood(void);
 
     const TexturePyramid & GetPyramid(void) const;
@@ -37,6 +37,6 @@ public:
 protected:
     TexturePyramid _pyramid;
     const PyramidDomain & _pyramid_domain;
-    const vector<TemplatePtr> _templars;
+    const vector<TemplarPtr> _templars;
 };
 #endif

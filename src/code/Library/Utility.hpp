@@ -16,7 +16,7 @@
 #include <memory>
 using namespace std;
 
-#include "Template.hpp"
+#include "Templar.hpp"
 #include "Neighborhood.hpp"
 #include "Sequencer.hpp"
 #include "TexturePyramid.hpp"
@@ -35,13 +35,13 @@ public:
 
     static string ReadPyramid(const string & level_file_names, TexturePyramidPtr & output, int & maximum_value);
 
-    static shared_ptr<Template> BuildTemplate(const string & neighborhood_spec, const int dimension);
-    static shared_ptr<Template> BuildTemplate(const string & neighborhood_spec, const vector<int> & values, const int dimension);
+    static shared_ptr<Templar> BuildTemplar(const string & neighborhood_spec, const int dimension);
+    static shared_ptr<Templar> BuildTemplar(const string & neighborhood_spec, const vector<int> & values, const int dimension);
  
     static shared_ptr<Domain> BuildDomain(const string & boundary_condition);
 
-    static shared_ptr<Neighborhood> BuildNeighborhood(const Template & templar, const Domain & domain);
-    static shared_ptr<Neighborhood> BuildNeighborhood(const vector<TemplatePtr> & templars, const Domain & domain, const TexturePyramid & pyramid, const PyramidDomain & pyramid_domain);
+    static shared_ptr<Neighborhood> BuildNeighborhood(const Templar & templar, const Domain & domain);
+    static shared_ptr<Neighborhood> BuildNeighborhood(const vector<TemplarPtr> & templars, const Domain & domain, const TexturePyramid & pyramid, const PyramidDomain & pyramid_domain);
 
     static shared_ptr<Sequencer> BuildSequencer(const string & sequence_spec, const vector<Position> & diffusion_seeds, const Neighborhood & neighborhood);
 

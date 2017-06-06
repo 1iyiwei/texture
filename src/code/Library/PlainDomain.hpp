@@ -23,7 +23,7 @@ public:
 
     virtual void Nearest(const Texture & source, const Position & anchor, Position & position) const;
 
-    virtual int NearestDistance2(const Texture & source, const Position & anchor, const Position & position) const;
+    virtual int Geodesic2(const Texture & source, const Position & anchor, const Position & position) const;
 };
 
 #endif

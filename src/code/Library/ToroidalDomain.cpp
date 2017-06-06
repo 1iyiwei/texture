@@ -48,7 +48,7 @@ void ToroidalDomain::Nearest(const Texture & source, const Position & anchor, Po
     }
 }
 
-int ToroidalDomain::NearestDistance2(const Texture & source, const Position & anchor, const Position & position) const
+int ToroidalDomain::Geodesic2(const Texture & source, const Position & anchor, const Position & position) const
 {
     if((position.size() != source.Dimension()) || (anchor.size() != source.Dimension()))
     {

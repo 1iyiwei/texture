@@ -24,14 +24,14 @@ void Domain::Nearest(const Texture & source, const Position & anchor, Position &
     // do nothing by default
 }
 
-int Domain::NearestDistance2(const Texture & source, const Position & anchor, const Position & position) const
+int Domain::Geodesic2(const Texture & source, const Position & anchor, const Position & position) const
 {
     Position altered = position;
     Nearest(source, anchor, altered);
 
     if(anchor.size() != altered.size())
     {
-        throw Exception("Domain::NearestDistance2(): dimensionality mismatch");
+        throw Exception("Domain::Geodesic2(): dimensionality mismatch");
     }
 
     int answer = 0;

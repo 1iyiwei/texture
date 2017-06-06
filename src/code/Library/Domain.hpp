@@ -27,7 +27,7 @@ public:
     virtual void Nearest(const Texture & source, const Position & anchor, Position & position) const;
 
     // L2 domain distance between anchor and position
-    virtual int NearestDistance2(const Texture & source, const Position & anchor, const Position & position) const;
+    virtual int Geodesic2(const Texture & source, const Position & anchor, const Position & position) const;
 
 };
 

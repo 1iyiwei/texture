@@ -58,7 +58,7 @@ string RandomDiffusionSequencer::Synthesize(const Synthesizer & synthesizer, Tex
 
             for(unsigned int j = 0; j < _seeds.size(); j++)
             {
-                const int dist2 = _neighborhood.GetDomain().NearestDistance2(target, _seeds[j], positions[i]);
+                const int dist2 = _neighborhood.GetDomain().Geodesic2(target, _seeds[j], positions[i]);
             
                 if((sorted[i].key < 0) || (sorted[i].key > dist2))
                 {

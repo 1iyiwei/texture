@@ -29,11 +29,11 @@ void PlainDomain::Nearest(const Texture & source, const Position & anchor, Posit
     // keep the original position
 }
  
-int PlainDomain::NearestDistance2(const Texture & source, const Position & anchor, const Position & position) const
+int PlainDomain::Geodesic2(const Texture & source, const Position & anchor, const Position & position) const
 {
     if(anchor.size() != position.size())
     {
-        throw Exception("PlainDomain::NearestDistance2(): dimensionality mismatch");
+        throw Exception("PlainDomain::Geodesic2(): dimensionality mismatch");
     }
 
     int answer = 0;

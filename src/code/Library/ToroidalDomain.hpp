@@ -30,7 +30,7 @@ protected:
 
     static int Nearest(const int source, const int anchor, const int position);
 
-    static int NearestDistance(const int source, const int anchor, const int position);
+    static int Geodesic(const int source, const int anchor, const int position);
 };
 
 #endif

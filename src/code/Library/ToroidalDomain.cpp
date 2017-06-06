@@ -59,7 +59,7 @@ int ToroidalDomain::Geodesic2(const Texture & source, const Position & anchor, c
 
     for(unsigned int i = 0; i < anchor.size(); i++)
     {
-        const int dist = NearestDistance(source.Size(i), anchor[i], position[i]);
+        const int dist = Geodesic(source.Size(i), anchor[i], position[i]);
 
         answer += dist*dist;
     }
@@ -98,7 +98,7 @@ int ToroidalDomain::Nearest(const int source, const int anchor, const int positi
     return answer;
 }
  
-int ToroidalDomain::NearestDistance(const int source, const int anchor, const int position)
+int ToroidalDomain::Geodesic(const int source, const int anchor, const int position)
 {
     const int corrected = Correct(source, position);
 

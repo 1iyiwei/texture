@@ -74,25 +74,28 @@ int ToroidalDomain::Correct(const int source, const int position)
 
 int ToroidalDomain::Nearest(const int source, const int anchor, const int position)
 {
-    int answer = Correct(source, position);
+    const int answer_me = Correct(source, position);
+    const int answer_neg = answer_me - source;
+    const int answer_pos = answer_me + source;
 
-    const int neg = abs(anchor-(answer-source));
-    const int me = abs(anchor-answer);
-    const int pos = abs(answer+source-anchor);
+    const int neg = abs(anchor - answer_neg);
+    const int me = abs(anchor - answer_me);
+    const int pos = abs(answer_pos - anchor);
 
     const int minimum = min(me, min(neg, pos));
 
+    int answer = 0;
     if(minimum == neg)
     {
-        answer = answer-source;
+        answer = answer_neg;
     }
     else if(minimum == pos)
     {
-        answer = answer+source;
+        answer = answer_pos;
     }
     else
     {
-        answer = answer;
+        answer = answer_me;
     }
 
     return answer;

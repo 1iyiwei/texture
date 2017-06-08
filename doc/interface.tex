@@ -1,8 +1,15 @@
-\section{User Interface}
+\section{Usage}
 \label{sec:interface}
 
-People like to know what you have done before how it is done.
+The entire code can be compiled via CMake.
 
-For HCI papers it is common to start with the user interface or usage scenarios.
-Even for a very theoretical paper, we can summarize the main equations/methods/applications/implications here, before diving into technical details.
+Please make sure you have ImageMagick installed, and its bin folder under your path.
+We rely on its convert command extensively for image format conversion and basic image processing.
+Please also install python for running the scripts.
+
+\filename{test.py} is an example Python script for ordinary texture synthesis without constraints.
+
+\filename{urc_test.py} is an example Python script for running the binary test data with various options explained in the comments.
+
+It is best to cmake everything under a \foldername{build} folder in parallel with \foldername{src}, and invoke the script from there.
 

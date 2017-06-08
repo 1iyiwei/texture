@@ -1,0 +1,43 @@
+\section{Implementation}
+\label{sec:implementation}
+
+The current codebase is implemented in c++ consisting of the following main groups of classes:
+
+\begin{description}
+
+\item[Image and Texture]
+
+These are arrays holding pixels and texels for images and textures.
+A texture holds source position for each texel in addition to image pixel.
+
+\item[Synthesizer]
+
+A synthesizer decides the color for a given output texel.
+\classname{RandomSynthesizer} simply picks a random candidate from the input and can serve as initialization.
+\classname{CoherenceSynthesizer} implements the main method described in \Cref{sec:algorithm}.
+
+\item[Sequencer]
+
+A sequencer decides the traversal order of synthesizing output texels.
+\classname{ScanlineSequencer} traverses in a raster order.
+\classname{RandomShuttleSequencer} and \classname{RandomVisitSequencer} traverse in a random order with and without guarantee of once and only once per output texel.
+\classname{RandomDiffusionSequencer} starts from the constraint points and gradually moves outwards.
+ 
+\item[Neighborhood and Template]
+A template decides the neighborhood size and shape, which is then fed into a neighborhood class for various related computations such as comparing two neighborhoods.
+
+\classname{SquareTemplate} is the basic square shape.
+\classname{CausalTemplate} converts any given template for causality, mainly in combination with \classname{ScanlineSequencer}.
+
+\classname{PlainNeighborhood} regards out of bound neighbors as null, and \classname{ToroidalNeighborhood} wraps up toroidally which is useful for producing tileable outputs.
+
+\item[Pyramid]
+
+These are the multi-resolution counterparts for the basic classes above, e.g. \classname{TexturePyramid}/\classname{PyramidNeighborhood} as the multi-resolution extension of \classname{Texture}/\classname{Neighborhood}.
+
+\item[Utility and Synth]
+
+The \classname{Utility} class contains the main code for organizing synthesis, while \classname{Synch} is its dumb main.
+
+\end{description}
+

@@ -1,29 +1,62 @@
 \section{Method}
 \label{sec:method}
+\label{sec:algorithm}
 
-Written words are more concrete than ideas in your head.
-Math equations and pseudo-codes are even more concrete than words, and can help, even though not essential, for exposition.
-Programs that produce the actual results are the most concrete, but the amount and level of information is not suitable for a research paper.
-I like to write down math and pseudo-code first as a way to design the algorithms before actual implementation.
+\paragraph{Assumption}
 
-\subsection{Math}
-\label{sec:math}
+The key assumption about textures is locality under contextual control \cite{Wei:2009:STTS}.
+In particular, each texture sample (e.g. pixel of an image texture or vertex of a mesh texture) relates to only those that are in its spatial vicinity (locality) \cite{Efros:1999:TSN}, but its property is conditioned upon global control such as environment variables (context) \cite{Lu:2007:CT}.
+Taking these two together, a texture consists of repetitive patterns that are local but potentially globally varying.
 
+\paragraph{Idea}
+
+Our method is adapted from 
+k-coherence \cite{Tong:2002:SBT} and randomized patch-match \cite{Barnes:2009:PRC} for quality\nothing{efficacy}, efficiency, flexibility, and simplicity.
+The basic idea stems from the coherence observation: regardless of the exact synthesis algorithms used, as long as the output has sufficient quality, it is usually composed of coherent patches from the input exemplar.
+In other words, if we record the source position $\position(\inputex, \sample)$ within the input exemplar $\inputex$ from which each output pixel $\sample \in \outputex$ comes from, the positions usually form coherent patches as visualized in \cite{Wei:2002:TSF}.
+This implies that to determine the color value $\range(\sample)$ of $\sample$, we can look at each one of its already synthesized neighbor $\sample' \in \outputex$ with input position $\position(\inputex, \sample')$, and use their relative input and output position offsets to compute a good potential candidate:
 \begin{align}
-\energy = \mass \lightspeed^2
-\label{eqn:emc2}
+\position(\inputex, \sample' \rightarrow \sample) = \position(\outputex, \sample) - \position(\outputex, \sample') + \position(\inputex, \sample')
+\label{eqn:coherence_offset}
 \end{align}
+, where $\position(\inputex, \sample' \rightarrow \sample)$ indicates a potentially good source position of $\sample$ at the input $\inputex$ as voted from an already computed output pixel $\sample'$.
+We can collect a set of such $\sample'$ in the (coherence) neighborhood $\corneighborhood$ of $\sample$, and see which one has the best matched (texture) neighborhood $\texneighborhood$:
+\begin{align}
+\range(\outputex, \sample) \leftarrow \range\left(\argmin_{\sample'} \left\{\left|\texneighborhood(\outputex, \sample) - \texneighborhood(\outputex, \sample')\right|^2 \forall \sample' \in \corneighborhood(\outputex, \sample) \right\} \right)
+\label{eqn:coherence_synthesis}
+\end{align}
+The coherence and texture neighborhoods $\corneighborhood$ and $\texneighborhood$ are usually small regions with specific shapes and sizes, e.g. circles or squares.
 
-Always use defined instead of naked math symbols for clarify and consistency.
-For example, in \Cref{eqn:emc2} I define all symbols inside \filename{symbols.tex} so later if I need to change $\energy$ from $E$ to $e$ I just need to change one line in \filename{symbols.tex} instead of chasing $E$ everywhere.
-This can save you a lot of time and sanity if you have many math symbols.
+\paragraph{Variations}
 
-\subsection{Code}
-\label{sec:code}
+Both k-coherence \cite{Tong:2002:SBT} and patch-match \cite{Barnes:2009:PRC} are generalizations of the main idea expressed in \Cref{eqn:coherence_synthesis}.
+In particular, \cite{Tong:2002:SBT} pre-computes a set of $\knumber$ candidates with similar texture neighborhoods to each input pixel $\sample \in \inputex$, so that each $\sample$ can provide $\knumber$ instead of just $1$ votes in \Cref{eqn:coherence_offset}.
+Empirical evidence indicates that this can indeed improve quality (with sufficiently small $\knumber$ in the range of 4 to 8), but this pre-computation can be too expensive for large input exemplars.
+Patch-match \cite{Barnes:2009:PRC} also bypasses this pre-computation, but instead of adding $\knumber$ random candidates to \Cref{eqn:coherence_synthesis}, which works surprisingly well.
 
-\input{dart_throw_alg}
+Optimization \cite{Kwatra:2005:TOE,Han:2006:TDO} can be imposed as an orthogonal component, but greedy assignment usually suffices.
 
-Pseudo-code can help summarize and explain the algorithms, but only if presented with sufficient clarity and simplicity. 
-\Cref{alg:dart_throw} is an example.
-All algorithms should be understandable from the main texts without looking at the pseudo-codes, which are usually more suitable for summarization than explanation.
+\paragraph{Constraint}
 
+Constraints can be easily added by simply presetting the colors of certain output pixels in \Cref{eqn:coherence_synthesis}, and let the synthesis process assign neighboring output to have consistent texture patterns.
+Good output quality can never be fully guaranteed as it depends on several factors, including whether the constraints leave enough degrees of freedom for optimization.
+
+\paragraph{Multi-resolution}
+
+The basic ideas above can be directly extended for multi-resolution synthesis \cite{Wei:2000:FTS} via the following basic steps:
+\begin{enumerate}
+\item
+Compute a Gaussian pyramid from the input with number of levels specified by the user.
+
+\item
+Synthesize the output from lower to higher levels, with each level generated from the corresponding input level.
+Each level computation is very similar to the single-resolution algorithm above, except that we can use multi-resolution neighborhoods (for both similarity measure and coherence).
+
+\item
+Write out the highest output level.
+\end{enumerate}
+
+Hard constraints are currently handled directly as invariant values inside the output pyramid during multi-resolution synthesis.
+This is not theoretically optimal, as hard constraints should be on the highest level only.
+But it seems to work well in practice.
+For better theoretical approach, we will need to pursue a joint optimization schemes such as \cite{Kwatra:2005:TOE,Han:2006:TDO} or a multi-grid solver.

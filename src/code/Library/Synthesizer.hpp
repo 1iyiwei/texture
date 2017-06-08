@@ -31,8 +31,6 @@ protected:
     typedef Templar::Weight Weight;
 
     DistType Distance2(const vector<Neighborhood::Neighbor> & foo, const vector<Neighborhood::Neighbor> & bar) const;
-
-    set<Position> & PositionSet(const vector<Position> & input, set<Position> & output) const;
 };
 
 #endif

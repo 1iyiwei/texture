@@ -10,7 +10,7 @@
 #define _COHERENCE_SYNTHESIZER_HPP
 
 #include "Synthesizer.hpp"
-#include "PyramidNeighborhood.hpp"
+#include "CoherenceNeighborhood.hpp"
 
 class CoherenceSynthesizer : public Synthesizer
 {
@@ -24,7 +24,6 @@ public:
     virtual string Synthesize(const Position & position, Texture & target) const;
 
 protected:
-    vector<Position> CoherenceCandidates(const Texture & texture, const Position & query) const;
 
     bool Penalize(vector<Neighborhood::Neighbor> & source, vector<Neighborhood::Neighbor> & target) const;
 
@@ -33,11 +32,7 @@ protected:
 
     const Neighborhood & _input_neighborhood;
     const Neighborhood & _output_neighborhood;
-    const Neighborhood & _coherence_neighborhood;
-
-    const PyramidNeighborhood * _input_pyramid_neighborhood_ptr;
-    const PyramidNeighborhood * _output_pyramid_neighborhood_ptr;
-    const PyramidNeighborhood * _coherence_pyramid_neighborhood_ptr;
+    const CoherenceNeighborhood _coherence_neighborhood;
 
     const RangePtr _penalty_range;
     const RangePtr _zero_range;

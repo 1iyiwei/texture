@@ -68,15 +68,3 @@ Synthesizer::DistType Synthesizer::Distance2(const vector<Neighborhood::Neighbor
     // done
     return total_answer;
 }
-
-set<Position> & Synthesizer::PositionSet(const vector<Position> & input, set<Position> & output) const
-{
-    output.clear();
-
-    for(unsigned int k = 0; k < input.size(); k++)
-    {
-        output.insert(input[k]);
-    }
-
-    return output;
-}

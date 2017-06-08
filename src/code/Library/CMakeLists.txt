@@ -7,6 +7,8 @@ ADD_LIBRARY(${PROJECT_NAME}
     Array.hpp
     CausalTemplar.cpp
     CausalTemplar.hpp
+    CoherenceNeighborhood.cpp
+    CoherenceNeighborhood.hpp
     CoherenceSynthesizer.cpp
     CoherenceSynthesizer.hpp
     Counter.cpp

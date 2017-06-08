@@ -11,12 +11,12 @@
 #include "Math.hpp"
 #include "Exception.hpp"
 
-CoherenceSynthesizer::CoherenceSynthesizer(const Texture & source, const Neighborhood & input_neighborhood, const Neighborhood & output_neighborhood, const Neighborhood & coherence_neighborhood, const RangePtr & penalty_range, const RangePtr & zero_range, const int num_extra_random_positions) : _source_texture(source), _input_neighborhood(input_neighborhood), _output_neighborhood(output_neighborhood), _coherence_neighborhood(coherence_neighborhood), _input_pyramid_neighborhood_ptr(dynamic_cast<const PyramidNeighborhood *>(&input_neighborhood)), _output_pyramid_neighborhood_ptr(dynamic_cast<const PyramidNeighborhood *>(&output_neighborhood)), _coherence_pyramid_neighborhood_ptr(dynamic_cast<const PyramidNeighborhood *>(&coherence_neighborhood)), _penalty_range(penalty_range), _zero_range(zero_range), _num_extra_random_positions(num_extra_random_positions)
+CoherenceSynthesizer::CoherenceSynthesizer(const Texture & source, const Neighborhood & input_neighborhood, const Neighborhood & output_neighborhood, const Neighborhood & coherence_neighborhood, const RangePtr & penalty_range, const RangePtr & zero_range, const int num_extra_random_positions) : _source_texture(source), _input_neighborhood(input_neighborhood), _output_neighborhood(output_neighborhood), _coherence_neighborhood(CoherenceNeighborhood(source, input_neighborhood, output_neighborhood, coherence_neighborhood)), _penalty_range(penalty_range), _zero_range(zero_range), _num_extra_random_positions(num_extra_random_positions)
 {
     // nothing else to do
 }
 
-CoherenceSynthesizer::CoherenceSynthesizer(const Texture & source, const PyramidNeighborhood & input_neighborhood, const PyramidNeighborhood & output_neighborhood, const PyramidNeighborhood & coherence_neighborhood, const RangePtr & penalty_range, const RangePtr & zero_range, const int num_extra_random_positions): _source_texture(source), _input_neighborhood(input_neighborhood), _output_neighborhood(output_neighborhood), _coherence_neighborhood(coherence_neighborhood), _input_pyramid_neighborhood_ptr(&input_neighborhood), _output_pyramid_neighborhood_ptr(&output_neighborhood), _coherence_pyramid_neighborhood_ptr(&coherence_neighborhood), _penalty_range(penalty_range), _zero_range(zero_range), _num_extra_random_positions(num_extra_random_positions)
+CoherenceSynthesizer::CoherenceSynthesizer(const Texture & source, const PyramidNeighborhood & input_neighborhood, const PyramidNeighborhood & output_neighborhood, const PyramidNeighborhood & coherence_neighborhood, const RangePtr & penalty_range, const RangePtr & zero_range, const int num_extra_random_positions): _source_texture(source), _input_neighborhood(input_neighborhood), _output_neighborhood(output_neighborhood), _coherence_neighborhood(CoherenceNeighborhood(source, input_neighborhood, output_neighborhood, coherence_neighborhood)), _penalty_range(penalty_range), _zero_range(zero_range), _num_extra_random_positions(num_extra_random_positions)
 {
     // nothing else to do
 }
@@ -34,7 +34,7 @@ string CoherenceSynthesizer::Synthesize(const Position & target_position, Textur
     }
 
     // construct candidate positions
-    vector<Position> candidate_sources = CoherenceCandidates(target_texture, target_position);
+    vector<Position> candidate_sources = _coherence_neighborhood.Candidates(target_texture, target_position);
 
     for(int k = 0; k < _num_extra_random_positions; k++)
     {
@@ -152,103 +152,6 @@ string CoherenceSynthesizer::Synthesize(const Position & target_position, Textur
 
     // shouldn't reach here
     return "CoherenceSynthesizer::Synthesize(): shouldn't reach here";
-}
-
-vector<Position> CoherenceSynthesizer::CoherenceCandidates(const Texture & texture, const Position & query) const
-{
-    vector<Position> candidates;
-
-    const vector<Neighborhood::Neighbor> neighbors = _coherence_neighborhood.Neighbors(texture, query);
-
-    for(unsigned int k = 0; k < neighbors.size(); k++)
-    {
-        const ConstTexelPtr & texel = neighbors[k].texel;
-
-        if(texel != 0)
-        {
-            const Position & source = texel->GetPosition();
-
-            const Position & offset = neighbors[k].offset;
-
-            if(source.size() != offset.size())
-            {
-#if 1
-                throw Exception("CoherenceSynthesizer::CoherenceCandidates(): source.size() != offset.size()");
-#else
-                // could be constrained texels without actual source position
-                continue;
-#endif
-            }
-
-            Position output = source;
-
-            for(unsigned int i = 0; i < output.size(); i++)
-            {
-                output[i] = source[i] - offset[i];
-            }
-
-            const int level = neighbors[k].level;
-
-            if(level >= 0)
-            {
-                if(!(_input_pyramid_neighborhood_ptr && _output_pyramid_neighborhood_ptr))
-                {
-                    throw Exception("CoherenceSynthesizer::CoherenceCandidates(): need pyramid neighborhood");
-                }
-
-                // output is not in the same pyramid level
-                // need transport in the input pyramid domain
-                const TexturePyramid & input_pyramid = _input_pyramid_neighborhood_ptr->GetPyramid();
-                const vector<int> & input_level_size = input_pyramid.Size(level);
-                const vector<int> & texture_size = texture.Size();
-
-                const PyramidDomain & input_pyramid_domain = _input_pyramid_neighborhood_ptr->GetPyramidDomain();
-                if(! input_pyramid_domain.Trace(input_level_size, output, texture_size, output))
-                {
-                    throw Exception("CoherenceSynthesizer::CoherenceCandidates(): cannot transport in the input pyramid domain");
-                }
-
-                // transport query back and forth to compute same-level offset
-                // in the output pyramid domain
-                const TexturePyramid & output_pyramid = _output_pyramid_neighborhood_ptr->GetPyramid();
-                const vector<int> & output_level_size = output_pyramid.Size(level);
-                const PyramidDomain & output_pyramid_domain = _output_pyramid_neighborhood_ptr->GetPyramidDomain();
-
-                Position query_again = query;
-                if(! output_pyramid_domain.Trace(texture_size, query, output_level_size, query_again))
-                {
-                    throw Exception("CoherenceSynthesizer::CoherenceCandidates(): cannot transport in the output pyramid domain");
-                }
-                if(! output_pyramid_domain.Trace(output_level_size, query_again, texture_size, query_again))
-                {
-                    throw Exception("CoherenceSynthesizer::CoherenceCandidates(): cannot transport again in the output pyramid domain");
-                }
-
-                // add together
-                for(unsigned int i = 0; i < output.size(); i++)
-                {
-                    output[i] += query[i] - query_again[i];
-                }
-            }
-
-            _input_neighborhood.GetDomain().Correct(_source_texture, output);
-
-            candidates.push_back(output);
-        }
-    }
-
-    {
-        set<Position> uniques;
-        uniques = PositionSet(candidates, uniques);
-        
-        candidates.clear();
-        for(set<Position>::iterator it = uniques.begin(); it != uniques.end(); ++it)
-        {
-            candidates.push_back(*it);
-        }
-    }
-
-    return candidates;
 }
 
 bool CoherenceSynthesizer::Penalize(vector<Neighborhood::Neighbor> & source, vector<Neighborhood::Neighbor> & target) const

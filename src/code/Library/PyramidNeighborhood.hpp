@@ -32,6 +32,7 @@ public:
     const TexturePyramid & GetPyramid(void) const;
     const PyramidDomain & GetPyramidDomain(void) const;
 
+protected:
     virtual vector<Neighbor> Neighbors(const Texture & source, const Position & position) const;
 
 protected:

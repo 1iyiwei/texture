@@ -20,6 +20,8 @@ public:
     PlainNeighborhood(const Templar & templar, const Domain & domain);
     virtual ~PlainNeighborhood(void);
 
+protected:
+    friend class PyramidNeighborhood;
     virtual vector<Neighbor> Neighbors(const Texture & source, const Position & position) const;
 
 protected:

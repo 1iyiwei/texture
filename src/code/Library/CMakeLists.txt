@@ -21,6 +21,8 @@ ADD_LIBRARY(${PROJECT_NAME}
     FrameBuffer.hpp
     Image.cpp
     Image.hpp
+    Match.cpp
+    Match.hpp
     Math.cpp
     Math.hpp
     Neighborhood.cpp

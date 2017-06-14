@@ -13,16 +13,19 @@
 
 #include "Templar.hpp"
 #include "Domain.hpp"
+#include "Range.hpp"
 #include "Texture.hpp"
 
 class Neighborhood
 {
 public:
+    friend class Match;
+
     typedef Templar::Weight Weight;
 
     struct Neighbor
     {
-        Neighbor(void) : level(-1) {};
+        Neighbor(void) : level(-1), weight(1) {};
 
         ConstTexelPtr texel;
         Position offset;
@@ -36,6 +39,8 @@ public:
 
     const Domain & GetDomain(void) const;
 
+protected:
+    friend class CoherenceNeighborhood;
     virtual vector<Neighbor> Neighbors(const Texture & source, const Position & position) const = 0;
 
 protected:

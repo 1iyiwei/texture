@@ -11,12 +11,12 @@
 #include "Math.hpp"
 #include "Exception.hpp"
 
-CoherenceSynthesizer::CoherenceSynthesizer(const Texture & source, const Neighborhood & input_neighborhood, const Neighborhood & output_neighborhood, const Neighborhood & coherence_neighborhood, const RangePtr & penalty_range, const RangePtr & zero_range, const int num_extra_random_positions) : _source_texture(source), _input_neighborhood(input_neighborhood), _output_neighborhood(output_neighborhood), _coherence_neighborhood(CoherenceNeighborhood(source, input_neighborhood, output_neighborhood, coherence_neighborhood)), _penalty_range(penalty_range), _zero_range(zero_range), _num_extra_random_positions(num_extra_random_positions)
+CoherenceSynthesizer::CoherenceSynthesizer(const Texture & source, const Neighborhood & input_neighborhood, const Neighborhood & output_neighborhood, const Neighborhood & coherence_neighborhood, const Match & match, const int num_extra_random_positions) : _source_texture(source), _input_neighborhood(input_neighborhood), _output_neighborhood(output_neighborhood), _coherence_neighborhood(CoherenceNeighborhood(source, input_neighborhood, output_neighborhood, coherence_neighborhood)), _match(match), _num_extra_random_positions(num_extra_random_positions)
 {
     // nothing else to do
 }
 
-CoherenceSynthesizer::CoherenceSynthesizer(const Texture & source, const PyramidNeighborhood & input_neighborhood, const PyramidNeighborhood & output_neighborhood, const PyramidNeighborhood & coherence_neighborhood, const RangePtr & penalty_range, const RangePtr & zero_range, const int num_extra_random_positions): _source_texture(source), _input_neighborhood(input_neighborhood), _output_neighborhood(output_neighborhood), _coherence_neighborhood(CoherenceNeighborhood(source, input_neighborhood, output_neighborhood, coherence_neighborhood)), _penalty_range(penalty_range), _zero_range(zero_range), _num_extra_random_positions(num_extra_random_positions)
+CoherenceSynthesizer::CoherenceSynthesizer(const Texture & source, const PyramidNeighborhood & input_neighborhood, const PyramidNeighborhood & output_neighborhood, const PyramidNeighborhood & coherence_neighborhood, const Match & match, const int num_extra_random_positions): _source_texture(source), _input_neighborhood(input_neighborhood), _output_neighborhood(output_neighborhood), _coherence_neighborhood(CoherenceNeighborhood(source, input_neighborhood, output_neighborhood, coherence_neighborhood)), _match(match), _num_extra_random_positions(num_extra_random_positions)
 {
     // nothing else to do
 }
@@ -47,9 +47,6 @@ string CoherenceSynthesizer::Synthesize(const Position & target_position, Textur
 
         candidate_sources.push_back(random_position);
     }
-
-    // target neighbors
-    const vector<Neighborhood::Neighbor> target_neighbors_pristine = _output_neighborhood.Neighbors(target_texture, target_position);
 
     // target itself
     TexelPtr target_texel = 0;
@@ -90,16 +87,8 @@ string CoherenceSynthesizer::Synthesize(const Position & target_position, Textur
             if(target_range->Distance2(*source_range) > 0) continue;
         }
 
-        vector<Neighborhood::Neighbor> source_neighbors = _input_neighborhood.Neighbors(_source_texture, source_position);
-
-        vector<Neighborhood::Neighbor> target_neighbors(target_neighbors_pristine);
-
-        if(! Penalize(source_neighbors, target_neighbors))
-        {
-            return "CoherenceSynthesizer::Synthesize(): cannot penalize";
-        }
-
-        const DistType current_measure = Distance2(source_neighbors, target_neighbors);
+        // Li-Yi: the target is fixed and thus repeatedly constructed for all sources; this can be fixed to improve performance
+        const DistType current_measure = _match.Distance2(_source_texture, source_position, _input_neighborhood, target_texture, target_position, _output_neighborhood);
 
         if(current_measure < 0)
         {
@@ -152,25 +141,4 @@ string CoherenceSynthesizer::Synthesize(const Position & target_position, Textur
 
     // shouldn't reach here
     return "CoherenceSynthesizer::Synthesize(): shouldn't reach here";
-}
-
-bool CoherenceSynthesizer::Penalize(vector<Neighborhood::Neighbor> & source, vector<Neighborhood::Neighbor> & target) const
-{
-    if(source.size() != target.size())
-    {
-        return false;
-    }
-
-    for(unsigned int k = 0; k < source.size(); k++)
-    {
-        if(!source[k].texel && target[k].texel)
-        {
-            // arbitrary position for source
-            source[k].texel.reset(new Texel(_penalty_range, target[k].texel->GetPosition()));
-            
-            target[k].texel.reset(new Texel(_zero_range, target[k].texel->GetPosition()));
-        }
-    }
-
-    return true;
 }

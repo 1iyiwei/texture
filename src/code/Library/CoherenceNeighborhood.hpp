@@ -23,8 +23,10 @@ public:
     
     virtual ~CoherenceNeighborhood(void);
 
+protected:
     virtual vector<Neighbor> Neighbors(const Texture & texture, const Position & query) const;
 
+public:
     virtual vector<Position> Candidates(const Texture & texture, const Position & query) const;
 
 protected:

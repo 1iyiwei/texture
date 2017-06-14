@@ -65,7 +65,7 @@ public:
 public:
     static const double PI;
     static const double INF;
-    static const double NAN;
+    // static const double NAN;
     static const double SQRT3OVER2;
 };
 

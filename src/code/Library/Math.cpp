@@ -14,7 +14,7 @@ using namespace std;
 
 const double Math::PI = 3.14159265;
 const double Math::INF = 1.0/sin(0.0);
-const double Math::NAN = sin(0.0)/sin(0.0);
+// const double Math::NAN = sin(0.0)/sin(0.0);
 const double Math::SQRT3OVER2 = (Math::Sqrt3() / 2.0f);
 
 int Math::AllInteger(const vector<float> & input)

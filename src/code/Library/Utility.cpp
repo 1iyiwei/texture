@@ -678,6 +678,8 @@ string Utility::SynthesizeOnce(const string & input_boundary, const string & out
     const int num_iterations = sequence_values[0];
 
     // synthesis
+    shared_ptr<Match> match(new Match(penalty_range, zero_range));
+
     shared_ptr<Synthesizer> synthesizer;
 
     if(synthesis_spec.find("random") != string::npos)
@@ -714,7 +716,7 @@ string Utility::SynthesizeOnce(const string & input_boundary, const string & out
 
             const shared_ptr<Neighborhood> coherence_neighborhood = (coherence_templars.size() > 1 ? BuildNeighborhood(coherence_templars, *coherence_domain, *target_pyramid, pyramid_domain) : BuildNeighborhood(*coherence_templars[0], *coherence_domain));
 
-            synthesizer.reset(new CoherenceSynthesizer(source, *input_neighborhood, *output_neighborhood, *coherence_neighborhood, penalty_range, zero_range, extra_random_positions));
+            synthesizer.reset(new CoherenceSynthesizer(source, *input_neighborhood, *output_neighborhood, *coherence_neighborhood, *match, extra_random_positions));
 
             for(int k = 0; k < num_iterations; k++)
             {

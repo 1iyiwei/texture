@@ -13,8 +13,19 @@ As a combination of multi-resolution (Fast Texture Synthesis using Tree-structur
 
 ## Build ##
 
-Go to the build folder, and cmake [CMakeLists.txt](./CMakeLists.txt).
+Go to the build folder, and 
+
+```
+cmake ..
+cmake --build . --config Release
+```
 
 ## Run ##
 
-Under the build folder, run bin/test.sh, and see the input and output under the data folder.
+Make sure [magick](https://www.imagemagick.org/) is under your path.
+
+Under the build folder, run
+```
+python ./bin/test.py
+```
+, and see the input and output under the data folder.

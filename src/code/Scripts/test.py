@@ -23,7 +23,7 @@ if True:
 
     input_dir = "../data/"
     output_dir = "../data/"
-    bin_dir = "bin"
+    bin_dir = os.path.join("bin", "Release");
 
     input_file_base_name = "161"
     
@@ -50,7 +50,7 @@ if True:
     output_file_name = os.path.join(output_dir, output_file_base_name + ".png")
 
     # input
-    convert_command = "convert -compress none " + input_file_name + " " + input_temp_name
+    convert_command = "magick -compress none " + input_file_name + " " + input_temp_name
     os.system(convert_command)
 
     # pyramid
@@ -61,7 +61,7 @@ if True:
     synth_command = os.path.join(bin_dir, "Synth") + " " + input_level_name_join + " " + input_boundary + " " + output_boundary + " " + synthesis_spec + " " + sequence_spec + " " + neighborhood_spec + " " + output_size + " " + output_temp_name
     os.system(synth_command)
 
-    convert_command = "convert " + output_temp_name + " " + output_file_name
+    convert_command = "magick " + output_temp_name + " " + output_file_name
     os.system(convert_command)
 
     # cleanup

@@ -35,7 +35,7 @@ def pyramid(input_file_path, num_levels):
 
         # compute
         resize = 100.0/pow(2, level);
-        downsample_command = 'convert ' + input_file_path + ' -colorspace RGB -filter ' + filter + ' -define filter:blur=' + str(blur) + ' -resize ' + str(resize) + '%' + ' -compress none ' + ' -colorspace RGB ' + level_file_name;
+        downsample_command = 'magick ' + input_file_path + ' -colorspace RGB -filter ' + filter + ' -define filter:blur=' + str(blur) + ' -resize ' + str(resize) + '%' + ' -compress none ' + ' -colorspace RGB ' + level_file_name;
         os.system(downsample_command);
 
     # done

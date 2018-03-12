@@ -7,7 +7,7 @@ INCLUDE(${PROJECT_SOURCE_DIR}/../../automation/custom/CopyScripts.cmake)
 
 # List all source files
 SET(SOURCE_FILES
-    test.py
+    example.py
     texture.py
 )
 

@@ -26,19 +26,36 @@ if True:
     bin_dir = os.path.join("bin", "Release");
 
     input_file_base_name = "161"
-    
-    input_boundary = "toroidal"
+
+    # the boundary conditions,
+    # toroidal for tileable images
+    # usually the input is not toroidal, so specify "none"
+    input_boundary = "none"
     output_boundary = "toroidal"
+
+    # synthesis methods for each pass
+    # random for randomly copy from the input
+    # coherence is the patch match coherence propagation
+    # coherencex.y: x spatial coherence neighbors and y random neighbors for extra consideration
     synthesis_spec = pass_separator.join(["coherence"+param_group_separator.join(['0', '1']), "coherence"+param_group_separator.join([level_separator.join(['1', '0']), '1']), "coherence"+param_group_separator.join([level_separator.join(['1', '0']), '1'])])
+    # synthesis_spec = pass_separator.join(["random", "coherence1.1", "coherence1.1"])
+
+    # passes for each output image or pyramid level
+    # scanline is the traditional scanline order
+    # randomshuffle visits each pixel once without replacement, which can help break scanline regularity/bias
     sequence_spec = pass_separator.join(["scanline1", "scanline3", "randomshuffle3"])
     
+    # number of pyramid levels for multi-resolution synthesis
+    # to specify the neighborhoods, as shown next below
     num_levels = 4
-    
+
+    # neighborhood sizes and shapes, can be multi-resolution
     if False:
         neighborhood_spec = pyramid_separator.join([level_separator.join(["square3", "square2"])]*num_levels)
     else:
         neighborhood_spec = pyramid_separator.join([pass_separator.join(["square0", level_separator.join(["square3", "square2"]), "square2"])]*num_levels)
 
+    # the size, height x width, of the output
     output_size = "119x131"
     output_file_base_name = input_file_base_name + "_" + output_size
 

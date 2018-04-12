@@ -6,6 +6,7 @@ import string
 import shutil
 import json
 import re
+import shutil
 
 # build pyramid from an input image
 # return an array of level file names
@@ -13,6 +14,11 @@ def pyramid(input_file_path, num_levels):
 
     filter = 'Lanczos';
     blur = .9891028367558475;
+
+    # magick
+    if(not shutil.which("magick")):
+        raise ValueError('need magick on your path; see https://www.imagemagick.org/');
+    magick = "magick";
 
     # names
     [file_path, input_file_name] = os.path.split(input_file_path)
@@ -35,7 +41,7 @@ def pyramid(input_file_path, num_levels):
 
         # compute
         resize = 100.0/pow(2, level);
-        downsample_command = 'magick ' + input_file_path + ' -colorspace RGB -filter ' + filter + ' -define filter:blur=' + str(blur) + ' -resize ' + str(resize) + '%' + ' -compress none ' + ' -colorspace RGB ' + level_file_name;
+        downsample_command = magick + ' ' + input_file_path + ' -colorspace RGB -filter ' + filter + ' -define filter:blur=' + str(blur) + ' -resize ' + str(resize) + '%' + ' -compress none ' + ' -colorspace RGB ' + level_file_name;
         os.system(downsample_command);
 
     # done

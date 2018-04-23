@@ -1,7 +1,7 @@
 /*
   ToroidalDomain.hpp
 
-  assumes null beyond texture boundary
+  assumes wrap-around texture boundary
 
   Li-Yi Wei
   August 21, 2014

@@ -29,6 +29,9 @@ public:
     // L2 domain distance between anchor and position
     virtual int Geodesic2(const Texture & source, const Position & anchor, const Position & position) const;
 
+    // decide where the target position diff is the same as the source diff 
+    virtual bool SameDiff(const Texture & source, const Position & source_diff, const Position & target_diff) const;
+
 };
 
 #endif

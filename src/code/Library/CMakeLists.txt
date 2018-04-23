@@ -55,6 +55,10 @@ ADD_LIBRARY(${PROJECT_NAME}
     Range.hpp
     ScanlineSequencer.cpp
     ScanlineSequencer.hpp
+    Seamster.cpp
+    Seamster.hpp
+    SeamSequencer.cpp
+    SeamSequencer.hpp
     Sequencer.cpp
     Sequencer.hpp
     SequentialCounter.cpp

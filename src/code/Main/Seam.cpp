@@ -78,7 +78,7 @@ int Main(int argc, char **argv)
     Array<FrameBuffer::P3> output_image(input_image);
 
     // seamster
-    Seamster seamster;
+    Seamster seamster(input_texture, input_domain, output_neighborhood);
 
     SequentialCounter counter(dimension, vector<int>(dimension, 0), Utility::Minus1(output_image.Size()));
     counter.Reset();
@@ -93,7 +93,7 @@ int Main(int argc, char **argv)
             return 1;
         }
 
-        const bool at_seam = seamster.AtSeam(input_texture, input_domain, output_texture, output_neighborhood, index);
+        const bool at_seam = seamster.AtSeam(index, output_texture);
 
         pixel.r = pixel.g = pixel.b = at_seam*max_input_value;
         if(! output_image.Put(index, pixel))

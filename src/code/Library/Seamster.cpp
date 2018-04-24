@@ -9,12 +9,17 @@
 #include "Seamster.hpp"
 #include "Exception.hpp"
 
+Seamster::Seamster(const Texture & source, const Domain & source_domain, const Neighborhood & target_neighborhood): _source(source), _source_domain(source_domain), _target_neighborhood(target_neighborhood)
+{
+    // nothing else to do
+}
+
 Seamster::~Seamster(void)
 {
     // nothing else to do
 }
 
-bool Seamster::AtSeam(const Texture & source, const Domain & source_domain, const Texture & target, const Neighborhood & target_neighborhood, const Position & target_position) const
+bool Seamster::AtSeam(const Position & target_position, const Texture & target) const
 {
     TexelPtr target_texel = 0;
     if(! target.Get(target_position, target_texel))
@@ -33,7 +38,7 @@ bool Seamster::AtSeam(const Texture & source, const Domain & source_domain, cons
 
     // const Domain & target_domain = target_neighborhood.GetDomain();
 
-    _target_neighbors = target_neighborhood.Neighbors(target, target_position);
+    _target_neighbors = _target_neighborhood.Neighbors(target, target_position);
 
     bool at_seam = false; // answer to return
 
@@ -54,7 +59,7 @@ bool Seamster::AtSeam(const Texture & source, const Domain & source_domain, cons
 
         _neighbor_source_position = neighbor.texel->GetPosition();
         // match the fact that neighbor.offset contains original/uncorrected diffs
-        source_domain.Nearest(source, target_source_position, _neighbor_source_position);
+        _source_domain.Nearest(_source, target_source_position, _neighbor_source_position);
 
         if(_neighbor_source_position.size() != target_source_position.size())
         {

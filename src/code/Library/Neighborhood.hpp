@@ -16,10 +16,14 @@
 #include "Range.hpp"
 #include "Texture.hpp"
 
+// #define _RESTRICT_ACCESS
+
 class Neighborhood
 {
 public:
+#ifdef _RESTRICT_ACCESS
     friend class Match;
+#endif
 
     typedef Templar::Weight Weight;
 
@@ -39,8 +43,11 @@ public:
 
     const Domain & GetDomain(void) const;
 
+#ifdef _RESTRICT_ACCESS
 protected:
     friend class CoherenceNeighborhood;
+#endif
+
     virtual vector<Neighbor> Neighbors(const Texture & source, const Position & position) const = 0;
 
 protected:

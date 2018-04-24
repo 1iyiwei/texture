@@ -43,23 +43,3 @@ int Domain::Geodesic2(const Texture & source, const Position & anchor, const Pos
 
     return answer;
 }
-
-bool Domain::SameDiff(const Texture & source, const Position & source_diff, const Position & target_diff) const
-{
-    if(source_diff.size() != target_diff.size())
-    {
-        return false;
-    }
-
-    bool answer = true;
-
-    for(unsigned int k = 0; k < target_diff.size(); k++)
-    {
-        if(source_diff[k] != target_diff[k])
-        {
-            answer = false;
-        }
-    }
-
-    return answer;
-}

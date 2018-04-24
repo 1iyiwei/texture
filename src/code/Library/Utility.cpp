@@ -28,6 +28,7 @@ using namespace std;
 
 #include "RandomSynthesizer.hpp"
 #include "CoherenceSynthesizer.hpp"
+#include "SeamSynthesizer.hpp"
 
 #include "ScanlineSequencer.hpp"
 #include "RandomVisitSequencer.hpp"
@@ -680,13 +681,17 @@ string Utility::SynthesizeOnce(const string & input_boundary, const string & out
     // synthesis
     shared_ptr<Match> match(new Match(penalty_range, zero_range));
 
-    shared_ptr<Synthesizer> synthesizer;
+    Seamster seamster(source, *input_domain, *output_neighborhood);
 
     if(synthesis_spec.find("random") != string::npos)
     {
-        synthesizer.reset(new RandomSynthesizer(source));
+        RandomSynthesizer random_synthesizer(source);
 
-        return sequencer->Synthesize(*synthesizer, target);
+        SeamSynthesizer seam_synthesizer(random_synthesizer, seamster);
+
+        const Synthesizer & synthesizer = *(synthesis_spec.find("seam") != string::npos ? dynamic_cast<Synthesizer *>(&seam_synthesizer) : dynamic_cast<Synthesizer *>(&random_synthesizer));
+
+        return sequencer->Synthesize(synthesizer, target);
     }
     else if(synthesis_spec.find("coherence") != string::npos)
     {
@@ -716,11 +721,15 @@ string Utility::SynthesizeOnce(const string & input_boundary, const string & out
 
             const shared_ptr<Neighborhood> coherence_neighborhood = (coherence_templars.size() > 1 ? BuildNeighborhood(coherence_templars, *coherence_domain, *target_pyramid, pyramid_domain) : BuildNeighborhood(*coherence_templars[0], *coherence_domain));
 
-            synthesizer.reset(new CoherenceSynthesizer(source, *input_neighborhood, *output_neighborhood, *coherence_neighborhood, *match, extra_random_positions));
+            CoherenceSynthesizer coherence_synthesizer(source, *input_neighborhood, *output_neighborhood, *coherence_neighborhood, *match, extra_random_positions);
+
+            SeamSynthesizer seam_synthesizer(coherence_synthesizer, seamster);
+
+            const Synthesizer & synthesizer = *(synthesis_spec.find("seam") != string::npos ? dynamic_cast<Synthesizer *>(&seam_synthesizer) : dynamic_cast<Synthesizer *>(&coherence_synthesizer));
 
             for(int k = 0; k < num_iterations; k++)
             {
-                const string message = sequencer->Synthesize(*synthesizer, target);
+                const string message = sequencer->Synthesize(synthesizer, target);
 
                 if(message != "")
                 {

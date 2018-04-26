@@ -10,6 +10,7 @@ set(projects
  HelloWorld
  Seam
  Synth
+ Tile
    )
 
 foreach(project ${projects})

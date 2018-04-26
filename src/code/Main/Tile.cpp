@@ -22,7 +22,7 @@ using namespace std;
 int Main(int argc, char **argv)
 {
     // input arguments
-    if(argc < 8)
+    if(argc < 7)
     {
         cerr << "Usage: " << argv[0] << " input_image_file_path input_boundary (toroidal or none)  synthesizer_spec sequencer_spec neighborhood_spec (e.g. square1) output_image_file_path" << endl;
         return 1;

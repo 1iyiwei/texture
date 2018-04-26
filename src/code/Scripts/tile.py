@@ -8,7 +8,7 @@ import fileinput
 import shutil
 
 def ppm_file_path(input_file_path):
-    dot_position = input_file_path.find(".");
+    dot_position = input_file_path.rfind(".");
     if(dot_position >= 0):
         answer = input_file_path[:(dot_position + 1)] + "ppm";
     else:
@@ -36,6 +36,7 @@ def main():
     input_image_ppm = ppm_file_path(input_image);
     output_image_ppm = ppm_file_path(output_image);
 
+    input_boundary = args.input_boundary;
     bin_dir = args.exe_folder;
 
     pass_separator = '+'
@@ -59,7 +60,7 @@ def main():
     os.system(command);
 
     # output conversion
-    command = magick + " " + output_image_ppm + " " + input_image;
+    command = magick + " " + output_image_ppm + " " + output_image;
     os.system(command);
 
     # cleanup

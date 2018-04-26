@@ -681,12 +681,11 @@ string Utility::SynthesizeOnce(const string & input_boundary, const string & out
     // synthesis
     shared_ptr<Match> match(new Match(penalty_range, zero_range));
 
-    Seamster seamster(source, *input_domain, *output_neighborhood);
-
     if(synthesis_spec.find("random") != string::npos)
     {
         RandomSynthesizer random_synthesizer(source);
 
+        Seamster seamster(source, *input_domain, *output_neighborhood);
         SeamSynthesizer seam_synthesizer(random_synthesizer, seamster);
 
         const Synthesizer & synthesizer = *(synthesis_spec.find("seam") != string::npos ? dynamic_cast<Synthesizer *>(&seam_synthesizer) : dynamic_cast<Synthesizer *>(&random_synthesizer));
@@ -723,6 +722,7 @@ string Utility::SynthesizeOnce(const string & input_boundary, const string & out
 
             CoherenceSynthesizer coherence_synthesizer(source, *input_neighborhood, *output_neighborhood, *coherence_neighborhood, *match, extra_random_positions);
 
+            Seamster seamster(source, *input_domain, *coherence_neighborhood);
             SeamSynthesizer seam_synthesizer(coherence_synthesizer, seamster);
 
             const Synthesizer & synthesizer = *(synthesis_spec.find("seam") != string::npos ? dynamic_cast<Synthesizer *>(&seam_synthesizer) : dynamic_cast<Synthesizer *>(&coherence_synthesizer));

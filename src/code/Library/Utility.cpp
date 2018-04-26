@@ -690,7 +690,14 @@ string Utility::SynthesizeOnce(const string & input_boundary, const string & out
 
         const Synthesizer & synthesizer = *(synthesis_spec.find("seam") != string::npos ? dynamic_cast<Synthesizer *>(&seam_synthesizer) : dynamic_cast<Synthesizer *>(&random_synthesizer));
 
-        return sequencer->Synthesize(synthesizer, target);
+        if(num_iterations > 0)
+        {
+            return sequencer->Synthesize(synthesizer, target);
+        }
+        else
+        {
+            return "";
+        }
     }
     else if(synthesis_spec.find("coherence") != string::npos)
     {

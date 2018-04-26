@@ -9,6 +9,7 @@ INCLUDE(${PROJECT_SOURCE_DIR}/../../automation/custom/CopyScripts.cmake)
 SET(SOURCE_FILES
     example.py
     texture.py
+    tile.py
 )
 
 ADD_CUSTOM_TARGET(${PROJECT_NAME} ALL)

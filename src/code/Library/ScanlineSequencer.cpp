@@ -10,10 +10,14 @@
 using namespace std;
 
 #include "ScanlineSequencer.hpp"
-#include "SequentialCounter.hpp"
 #include "Utility.hpp"
 
-string ScanlineSequencer::Synthesize(const Synthesizer & synthesizer, Texture & target) const
+ScanlineSequencer::ScanlineSequencer(void): _over(true)
+{
+    // nothing else to do
+}
+
+bool ScanlineSequencer::Reset(const Texture & target)
 {
     const int dimension = target.Dimension();
 
@@ -21,28 +25,25 @@ string ScanlineSequencer::Synthesize(const Synthesizer & synthesizer, Texture & 
     vector<int> max_index = Utility::Minus1(target.Size());
     Reverse(max_index);
 
-    SequentialCounter counter(dimension, min_index, max_index);
+    _over = false;
 
-    Position index;
+    return _counter.Reset(dimension, min_index, max_index);
+}
 
-    counter.Reset();
-
-    do
+bool ScanlineSequencer::Next(Position & answer)
+{
+    if(_over)
     {
-        counter.Get(index);
+        return false;
+    }
+    else
+    {
+        _counter.Get(answer);
+        Reverse(answer);
+        _over = !_counter.Next();
 
-        Reverse(index);
-
-        const string message = synthesizer.Synthesize(index, target);
-
-        if(message != "")
-        {
-            return message;
-        }
-    }        
-    while(counter.Next());
-
-    return "";
+        return true;
+    }
 }
 
 void ScanlineSequencer::Reverse(Position & position)

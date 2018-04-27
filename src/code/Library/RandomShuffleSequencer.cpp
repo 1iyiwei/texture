@@ -13,7 +13,12 @@ using namespace std;
 #include "SequentialCounter.hpp"
 #include "Utility.hpp"
 
-string RandomShuffleSequencer::Synthesize(const Synthesizer & synthesizer, Texture & target) const
+RandomShuffleSequencer::RandomShuffleSequencer(void): _current_position(0)
+{
+    // nothing else to do
+}
+
+bool RandomShuffleSequencer::Reset(const Texture & target)
 {
     // build list of positions
     const int dimension = target.Dimension();
@@ -24,31 +29,33 @@ string RandomShuffleSequencer::Synthesize(const Synthesizer & synthesizer, Textu
     SequentialCounter counter(dimension, min_index, max_index);
 
     Position index;
-    vector<Position> positions;
+    _positions.clear();
     counter.Reset();
     do
     {
         counter.Get(index);
-        positions.push_back(index);
+        _positions.push_back(index);
     }
     while(counter.Next());
 
     // random shuffle
-    random_shuffle(positions.begin(), positions.end());
+    random_shuffle(_positions.begin(), _positions.end());
 
-    // synthesis
-    for(unsigned int k = 0; k < positions.size(); k++)
+    _current_position = 0;
+
+    return true;
+}
+
+bool RandomShuffleSequencer::Next(Position & answer)
+{
+    if(_current_position < _positions.size())
     {
-        const vector<int> & index = positions[k];
-
-        const string message = synthesizer.Synthesize(index, target);
-
-        if(message != "")
-        {
-            return message;
-        }
+        answer = _positions[_current_position];
+        _current_position++;
+        return true;
     }
-    
-    // done
-    return "";
+    else
+    {
+        return false;
+    }
 }

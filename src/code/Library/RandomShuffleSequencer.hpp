@@ -16,6 +16,12 @@
 class RandomShuffleSequencer : public Sequencer
 {
 public:
-    virtual string Synthesize(const Synthesizer & synthesizer, Texture & target) const;
+    RandomShuffleSequencer(void);
+    virtual bool Reset(const Texture & target);
+    virtual bool Next(Position & answer);
+
+private:
+    vector<Position> _positions;
+    unsigned int _current_position; 
 };
 #endif

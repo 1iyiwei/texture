@@ -14,7 +14,6 @@
 #include <string>
 using namespace std;
 
-#include "Synthesizer.hpp"
 #include "Texture.hpp"
 
 class Sequencer
@@ -22,7 +21,9 @@ class Sequencer
 public:
     virtual ~Sequencer(void) = 0;
 
-    // synthesize the target in a certain order/fashion
-    virtual string Synthesize(const Synthesizer & synthesizer, Texture & target) const;
+    // reset the sequencer
+    virtual bool Reset(const Texture & target);
+    // next synthesis position; return whether valid or not
+    virtual bool Next(Position & answer);
 };
 #endif

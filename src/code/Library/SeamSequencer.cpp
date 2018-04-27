@@ -13,7 +13,14 @@ SeamSequencer::~SeamSequencer(void)
     // nothing else to do
 }
 
-string SeamSequencer::Synthesize(const Synthesizer & synthesizer, Texture & target) const
+bool SeamSequencer::Reset(const Texture & target)
 {
-    return "not yet done";
+    // not yet done
+    return false;
+}
+
+bool SeamSequencer::Next(Position & answer)
+{
+    // not yet done
+    return false;
 }

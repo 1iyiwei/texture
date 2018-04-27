@@ -45,8 +45,8 @@ def main():
     param_group_separator = '.'
 
     # coherencex.y: x spatial coherence neighbors and y random neighbors for extra consideration
-    synthesis_spec = "seam_coherence"+param_group_separator.join(['1', '1']);
-    sequence_spec = "scanline3";
+    synthesis_spec = "seam_random"+param_group_separator.join(['1', '1']);
+    sequence_spec = "randomshuffle1";
     neighborhood_spec = "square3";
 
     clean_up = True;

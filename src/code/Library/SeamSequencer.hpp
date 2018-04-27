@@ -18,6 +18,7 @@ class SeamSequencer : public Sequencer
 public:
     virtual ~SeamSequencer(void);
 
-    virtual string Synthesize(const Synthesizer & synthesizer, Texture & target) const;
+    virtual bool Reset(const Texture & target);
+    virtual bool Next(Position & answer);
 };
 #endif

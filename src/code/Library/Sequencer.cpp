@@ -13,8 +13,14 @@ Sequencer::~Sequencer(void)
     // nothing else to do
 }
 
-string Sequencer::Synthesize(const Synthesizer & synthesizer, Texture & target) const
+bool Sequencer::Reset(const Texture & target)
 {
-    // should not be called
-    return "Sequencer::Synthesize(): shouldn't be called";
+    // shouldn't be called
+    return false;
+}
+
+bool Sequencer::Next(Position & answer)
+{
+    // shouldn't be called
+    return false;
 }

@@ -16,11 +16,13 @@ using namespace std;
 class Counter
 {
 public:
+    Counter(void);
     Counter(const int dimension);
     virtual ~Counter(void) = 0;
 
     // return 1 if successful, 0 else
     virtual int Reset(void);
+    virtual int Reset(const int dimension);
 
     // get the current counter value
     // return 1 if successful, 0 else
@@ -41,7 +43,7 @@ protected:
     };
 
 protected:
-    const int _dimension;
+    int _dimension;
 };
 
 #endif

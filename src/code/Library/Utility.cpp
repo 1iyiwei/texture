@@ -35,6 +35,8 @@ using namespace std;
 #include "RandomShuffleSequencer.hpp"
 #include "RandomDiffusionSequencer.hpp"
 
+#include "Weaver.hpp"
+
 #include "SequentialCounter.hpp"
 
 vector<int> Utility::Minus1(const vector<int> & input)
@@ -680,6 +682,7 @@ string Utility::SynthesizeOnce(const string & input_boundary, const string & out
 
     // synthesis
     shared_ptr<Match> match(new Match(penalty_range, zero_range));
+    Weaver weaver;
 
     if(synthesis_spec.find("random") != string::npos)
     {
@@ -692,7 +695,7 @@ string Utility::SynthesizeOnce(const string & input_boundary, const string & out
 
         if(num_iterations > 0)
         {
-            return sequencer->Synthesize(synthesizer, target);
+            return weaver.Synthesize(*sequencer, synthesizer, target);
         }
         else
         {
@@ -736,7 +739,7 @@ string Utility::SynthesizeOnce(const string & input_boundary, const string & out
 
             for(int k = 0; k < num_iterations; k++)
             {
-                const string message = sequencer->Synthesize(synthesizer, target);
+                const string message = weaver.Synthesize(*sequencer, synthesizer, target);
 
                 if(message != "")
                 {

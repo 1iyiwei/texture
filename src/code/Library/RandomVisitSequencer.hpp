@@ -17,6 +17,12 @@
 class RandomVisitSequencer : public Sequencer
 {
 public:
-    virtual string Synthesize(const Synthesizer & synthesizer, Texture & target) const;
+    RandomVisitSequencer(void);
+    virtual bool Reset(const Texture & target);
+    virtual bool Next(Position & answer);
+
+private:
+    vector<int> _target_size;
+    int _total_count;
 };
 #endif

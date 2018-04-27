@@ -13,7 +13,7 @@ using namespace std;
 #include "Utility.hpp"
 #include "SequentialCounter.hpp"
 
-RandomDiffusionSequencer::RandomDiffusionSequencer(const vector<Position> & seeds, const Neighborhood & boundary_handler): _seeds(seeds), _neighborhood(boundary_handler)
+RandomDiffusionSequencer::RandomDiffusionSequencer(const vector<Position> & seeds, const Neighborhood & boundary_handler): _seeds(seeds), _neighborhood(boundary_handler), _current_position(0)
 {
     // nothing else to do
 }
@@ -23,7 +23,7 @@ RandomDiffusionSequencer::~RandomDiffusionSequencer(void)
     // nothing else to do
 }
 
-string RandomDiffusionSequencer::Synthesize(const Synthesizer & synthesizer, Texture & target) const
+bool RandomDiffusionSequencer::Reset(const Texture & target)
 {
     // build list of positions
     const int dimension = target.Dimension();
@@ -34,31 +34,31 @@ string RandomDiffusionSequencer::Synthesize(const Synthesizer & synthesizer, Tex
     SequentialCounter counter(dimension, min_index, max_index);
 
     Position index;
-    vector<Position> positions;
+    _positions.clear();
     counter.Reset();
     do
     {
         counter.Get(index);
-        positions.push_back(index);
+        _positions.push_back(index);
     }
     while(counter.Next());
 
     // random shuffle
-    random_shuffle(positions.begin(), positions.end());
+    random_shuffle(_positions.begin(), _positions.end());
 
     // sort according to distance from the nearest seed
     if(_seeds.size() > 0)
     {
-        vector<Sortee> sorted(positions.size());
+        vector<Sortee> sorted(_positions.size());
 
         for(unsigned int i = 0; i < sorted.size(); i++)
         {
-            sorted[i].value = positions[i];
+            sorted[i].value = _positions[i];
             sorted[i].key = -1;
 
             for(unsigned int j = 0; j < _seeds.size(); j++)
             {
-                const int dist2 = _neighborhood.GetDomain().Geodesic2(target, _seeds[j], positions[i]);
+                const int dist2 = _neighborhood.GetDomain().Geodesic2(target, _seeds[j], _positions[i]);
             
                 if((sorted[i].key < 0) || (sorted[i].key > dist2))
                 {
@@ -69,27 +69,29 @@ string RandomDiffusionSequencer::Synthesize(const Synthesizer & synthesizer, Tex
 
         sort(sorted.begin(), sorted.end());
    
-        for(unsigned int k = 0; k < positions.size(); k++)
+        for(unsigned int k = 0; k < _positions.size(); k++)
         {
-            positions[k] = sorted[k].value;
+            _positions[k] = sorted[k].value;
         }
     }
 
-    // synthesis
-    for(unsigned int k = 0; k < positions.size(); k++)
+    _current_position = 0;
+
+    return true;
+}
+
+bool RandomDiffusionSequencer::Next(Position & answer)
+{
+    if(_current_position < _positions.size())
     {
-        const vector<int> & index = positions[k];
-
-        const string message = synthesizer.Synthesize(index, target);
-
-        if(message != "")
-        {
-            return message;
-        }
+        answer = _positions[_current_position];
+        _current_position++;
+        return true;
     }
-
-    // done
-    return "";
+    else
+    {
+        return false;
+    }
 }
 
 bool RandomDiffusionSequencer::Sortee::operator<(const RandomDiffusionSequencer::Sortee & rhs)

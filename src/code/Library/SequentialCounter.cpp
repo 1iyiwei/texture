@@ -8,6 +8,11 @@
 
 #include "SequentialCounter.hpp"
 
+SequentialCounter::SequentialCounter(void)
+{
+    // nothing else to do
+}
+
 SequentialCounter::SequentialCounter(const int dimension, const int digit_min, const int digit_max) : Counter(dimension), _digit_min(dimension), _digit_max(dimension), _value(dimension)
 {
     for(int i = 0; i < dimension; i++)
@@ -75,12 +80,13 @@ int SequentialCounter::Reset(const int dimension, const int digit_min, const int
 
 int SequentialCounter::Reset(const int dimension, const vector<int> & digit_min, const vector<int> & digit_max)
 {
-    if(dimension != Counter::Dimension())
+    if(! Counter::Reset(dimension))
     {
         return 0;
     }
     else
     {
+        _value.resize(dimension);
         _digit_min = digit_min;
         _digit_max = digit_max;
         return Reset();

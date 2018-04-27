@@ -83,6 +83,8 @@ ADD_LIBRARY(${PROJECT_NAME}
  Utility.hpp
  VectorRange.cpp
  VectorRange.hpp
+ Weaver.cpp
+ Weaver.hpp
  rand48/_rand48.c
  rand48/drand48.c
  rand48/erand48.c

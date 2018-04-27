@@ -10,13 +10,20 @@
 #define _SCANLINE_SEQUENCER_HPP
 
 #include "Sequencer.hpp"
+#include "SequentialCounter.hpp"
 
 class ScanlineSequencer : public Sequencer
 {
 public:
-    virtual string Synthesize(const Synthesizer & synthesizer, Texture & target) const;
+    ScanlineSequencer(void);
+    virtual bool Reset(const Texture & target);
+    virtual bool Next(Position & answer);
 
 protected:
     static void Reverse(Position & position);
+
+private:
+    SequentialCounter _counter;
+    bool _over;
 };
 #endif

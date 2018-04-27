@@ -24,7 +24,8 @@ public:
     RandomDiffusionSequencer(const vector<Position> & seeds, const Neighborhood & boundary_handler);
     virtual ~RandomDiffusionSequencer(void);
 
-    virtual string Synthesize(const Synthesizer & synthesizer, Texture & target) const;
+    virtual bool Reset(const Texture & target);
+    virtual bool Next(Position & answer);
 
 protected:
     const vector<Position> _seeds;
@@ -36,5 +37,9 @@ protected:
         Position value;
         bool operator<(const Sortee & rhs);
     };
+
+private:
+    vector<Position> _positions;
+    unsigned int _current_position; 
 };
 #endif

@@ -14,6 +14,7 @@
 class SequentialCounter : public Counter
 {
 public:
+    SequentialCounter(void);
     SequentialCounter(const int dimension, const int digit_min, const int digit_max);
     SequentialCounter(const int dimension, const vector<int> & digit_min, const vector<int> & digit_max);
     ~SequentialCounter(void);

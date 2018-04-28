@@ -8,7 +8,7 @@
 
 #include "SeamSequencer.hpp"
 
-SeamSequencer::SeamSequencer(const Seamster & seamster, Sequencer & source): _seamster(seamster),  _source(source), _current_position(0)
+SeamSequencer::SeamSequencer(const Seamster & seamster, shared_ptr<Sequencer> & source): _seamster(seamster), _source(source), _current_position(0)
 {
     // nothing else to do
 }
@@ -20,7 +20,13 @@ SeamSequencer::~SeamSequencer(void)
 
 bool SeamSequencer::Reset(const Texture & target)
 {
-    if(!_source.Reset(target))
+    if(!_source)
+    {
+        // null source
+        return false;
+    }
+
+    if(!_source->Reset(target))
     {
         return false;
     }
@@ -28,7 +34,7 @@ bool SeamSequencer::Reset(const Texture & target)
     Position position;
     _positions.clear();
 
-    while(_source.Next(position))
+    while(_source->Next(position))
     {
         if(_seamster.AtSeam(position, target))
         {

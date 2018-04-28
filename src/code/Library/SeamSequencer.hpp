@@ -18,7 +18,7 @@ class SeamSequencer : public Sequencer
 {
 public:
     // take orders from the source sequencer and keep only seams
-    SeamSequencer(const Seamster & seamster, Sequencer & source);
+    SeamSequencer(const Seamster & seamster, shared_ptr<Sequencer> & source);
     virtual ~SeamSequencer(void);
 
     virtual bool Reset(const Texture & target);
@@ -26,7 +26,7 @@ public:
 
 private:
     const Seamster & _seamster;
-    Sequencer & _source;
+    shared_ptr<Sequencer> _source;
     vector<Position> _positions;
     unsigned int _current_position; 
 };

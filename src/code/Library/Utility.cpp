@@ -34,6 +34,7 @@ using namespace std;
 #include "RandomVisitSequencer.hpp"
 #include "RandomShuffleSequencer.hpp"
 #include "RandomDiffusionSequencer.hpp"
+#include "SeamSequencer.hpp"
 
 #include "Weaver.hpp"
 
@@ -693,6 +694,11 @@ string Utility::SynthesizeOnce(const string & input_boundary, const string & out
 
         const Synthesizer & synthesizer = *(synthesis_spec.find("seam") != string::npos ? dynamic_cast<Synthesizer *>(&seam_synthesizer) : dynamic_cast<Synthesizer *>(&random_synthesizer));
 
+        if(sequence_spec.find("seam") != string::npos)
+        {
+            sequencer.reset(new SeamSequencer(seamster, sequencer));
+        }
+
         if(num_iterations > 0)
         {
             return weaver.Synthesize(*sequencer, synthesizer, target);
@@ -736,6 +742,11 @@ string Utility::SynthesizeOnce(const string & input_boundary, const string & out
             SeamSynthesizer seam_synthesizer(coherence_synthesizer, seamster);
 
             const Synthesizer & synthesizer = *(synthesis_spec.find("seam") != string::npos ? dynamic_cast<Synthesizer *>(&seam_synthesizer) : dynamic_cast<Synthesizer *>(&coherence_synthesizer));
+
+            if(sequence_spec.find("seam") != string::npos)
+            {
+                sequencer.reset(new SeamSequencer(seamster, sequencer));
+            }
 
             for(int k = 0; k < num_iterations; k++)
             {

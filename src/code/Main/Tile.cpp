@@ -22,15 +22,16 @@ using namespace std;
 int Main(int argc, char **argv)
 {
     // input arguments
-    if(argc < 7)
+    if(argc < 8)
     {
-        cerr << "Usage: " << argv[0] << " input_image_file_path input_boundary (toroidal or none)  synthesizer_spec sequencer_spec neighborhood_spec (e.g. square1) output_image_file_path" << endl;
+        cerr << "Usage: " << argv[0] << " input_image_file_path init_coord_spec input_boundary (toroidal or none)  synthesizer_spec sequencer_spec neighborhood_spec (e.g. square1) output_image_file_path" << endl;
         return 1;
     }
     
     int arg_ctr = 0;
     
     const string input_image_file_path(argv[++arg_ctr]);
+    const string init_coord_spec(argv[++arg_ctr]);
     const string input_boundary(argv[++arg_ctr]);
     const string output_boundary("toroidal");
     const string synthesis_spec(argv[++arg_ctr]);
@@ -50,6 +51,17 @@ int Main(int argc, char **argv)
     const Texture input_texture(input_image);
     
     const int dimension = input_texture.Dimension();
+
+    // init coord
+    Array<FrameBuffer::P3> init_coord;
+    int max_coord_value = -1;
+    if(! FrameBuffer::ReadPPM(init_coord_spec, init_coord, max_coord_value))
+    {
+        // verbatim input coordinates
+
+        init_coord = input_image;
+        vector<int> index;
+    }
 
     // domain and neighborhood
     const shared_ptr<Domain> p_input_domain = Utility::BuildDomain(input_boundary);

@@ -66,8 +66,8 @@ string Convert(const Array<FrameBuffer::P3> & coord_image, Array<Position> & coo
             return "cannot get pixel";
         }
 
-        position[0] = pixel.r;
-        position[1] = pixel.g;
+        position[0] = pixel.g;
+        position[1] = pixel.r;
 
         if(! coord_array.Put(index, position))
         {

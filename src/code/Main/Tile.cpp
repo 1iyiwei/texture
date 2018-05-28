@@ -170,7 +170,7 @@ int Main(int argc, char **argv)
     Random::InitRandomNumberGenerator();
 
     // output texture
-    Texture output_texture(input_image, init_coord);
+    Texture output_texture(input_texture, init_coord);
 
     // synthesis
     const string message = Utility::Synthesize(input_boundary, output_boundary, synthesis_spec, sequence_spec, neighborhood_spec, input_texture, output_texture, penalty_range, zero_range);

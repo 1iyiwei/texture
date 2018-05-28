@@ -24,46 +24,11 @@ Texture::Texture(const vector<int> & size) : Array<TexelPtr>(size)
 
 Texture::Texture(const Array<FrameBuffer::P3> & rgb_input) : Array<TexelPtr>(rgb_input.Size())
 {
-    Array<Position> init_coord(rgb_input.Size());
-
     const int dimension = rgb_input.Dimension();
 
-    SequentialCounter counter(dimension, vector<int>(dimension, 0), Utility::Minus1(init_coord.Size()));
+    SequentialCounter counter(dimension, vector<int>(dimension, 0), Utility::Minus1(rgb_input.Size()));
 
     Position position;
-
-    counter.Reset();
-    do
-    {
-        counter.Get(position);
-        
-        if(! init_coord.Put(position, position))
-        {
-            throw Exception("Texture::Texture(): cannot put position");
-        }
-    }
-    while(counter.Next());
-
-    Construct(rgb_input, init_coord);
-}
-
-Texture::Texture(const Array<FrameBuffer::P3> & rgb_input, const Array<Position> & init_coord) : Array<TexelPtr>(init_coord.Size())
-{
-    Construct(rgb_input, init_coord);
-}
-
-void Texture::Construct(const Array<FrameBuffer::P3> & rgb_input, const Array<Position> & init_coord)
-{
-    if(rgb_input.Dimension() != init_coord.Dimension())
-    {
-        throw Exception("Texture::Construct(): dimensionality mismatch");
-    }
-
-    const int dimension = rgb_input.Dimension();
-
-    SequentialCounter counter(dimension, vector<int>(dimension, 0), Utility::Minus1(init_coord.Size()));
-
-    Position position, coord;
     FrameBuffer::P3 pixel;
     vector<int> vecxel(3);
     
@@ -72,24 +37,56 @@ void Texture::Construct(const Array<FrameBuffer::P3> & rgb_input, const Array<Po
     {
         counter.Get(position);
 
-        if(! init_coord.Get(position, coord))
+        if(! rgb_input.Get(position, pixel))
         {
-            throw Exception("Texture::Construct(): cannot get coord");
-        }
-
-        if(! rgb_input.Get(coord, pixel))
-        {
-            throw Exception("Texture::Construct(): cannot get pixel");
+            throw Exception("Texture::Texture(const Array<FrameBuffer::P3> &): cannot get pixel");
         }
 
         vecxel[0] = pixel.r; vecxel[1] = pixel.g; vecxel[2] = pixel.b;
         RangePtr range(new VectorRange<int>(vecxel));
         
-        TexelPtr texel(new Texel(range, coord));
+        TexelPtr texel(new Texel(range, position));
 
         if(! Put(position, texel))
         {
-            throw Exception("Texture::Construct(): cannot put texel");
+            throw Exception("Texture::Texture(const Array<FrameBuffer::P3> &): cannot put texel");
+        }
+    }
+    while(counter.Next());
+}
+
+Texture::Texture(const Texture & input_texture, const Array<Position> & init_coord) : Array<TexelPtr>(init_coord.Size())
+{
+    if(input_texture.Dimension() != init_coord.Dimension())
+    {
+        throw Exception("Texture::Texture(): dimensionality mismatch");
+    }
+
+    const int dimension = input_texture.Dimension();
+
+    SequentialCounter counter(dimension, vector<int>(dimension, 0), Utility::Minus1(init_coord.Size()));
+
+    Position position, coord;
+    TexelPtr texel;
+
+    counter.Reset();
+    do
+    {
+        counter.Get(position);
+        
+        if(! init_coord.Get(position, coord))
+        {
+            throw Exception("Texture::Texture(const Texture &, const Array<Position> &): cannot get coord");
+        }
+
+        if(! input_texture.Get(coord, texel))
+        {
+            throw Exception("Texture::Texture(const Texture &, const Array<Position> &): cannot get texel");
+        }
+
+        if(! Put(position, texel))
+        {
+            throw Exception("Texture::Texture(const Texture &, const Array<Position> &): cannot put texel");
         }
     }
     while(counter.Next());

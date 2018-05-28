@@ -23,6 +23,7 @@ def main():
     parser = argparse.ArgumentParser(description='tile');
     parser.add_argument("input_image")
     parser.add_argument("output_image")
+    parser.add_argument("-c", "--init_coord", default = "none", help='init coordinate spec');    
     parser.add_argument("-b", "--input_boundary", default = "none", help='input boundary condition (none or toroidal)');    
     parser.add_argument("--exe_folder", default = os.path.join(".", "bin", "Release"), help="folder for the executable file");
     args = parser.parse_args()
@@ -32,6 +33,7 @@ def main():
     magick = "magick";
 
     input_image = args.input_image;
+    init_coord = args.init_coord;
     output_image = args.output_image;
     input_image_ppm = ppm_file_path(input_image);
     output_image_ppm = ppm_file_path(output_image);
@@ -56,7 +58,7 @@ def main():
     os.system(command);
 
     # tile
-    command = os.path.join(bin_dir, "Tile") + " " + input_image_ppm + " " + input_boundary + " " + synthesis_spec + " " + sequence_spec + " " + neighborhood_spec + " " + output_image_ppm;
+    command = os.path.join(bin_dir, "Tile") + " " + input_image_ppm + " " + init_coord + " " + input_boundary + " " + synthesis_spec + " " + sequence_spec + " " + neighborhood_spec + " " + output_image_ppm;
     os.system(command);
 
     # output conversion

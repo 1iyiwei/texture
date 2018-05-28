@@ -22,6 +22,7 @@ public:
     Texture(void);
     Texture(const vector<int> & size);
     Texture(const Array<FrameBuffer::P3> & rgb_input);
+    Texture(const Array<FrameBuffer::P3> & rgb_input, const Array<Position> & init_coord);
     virtual ~Texture(void);
 
     bool Convert(Array<FrameBuffer::P3> & rgb_output) const;

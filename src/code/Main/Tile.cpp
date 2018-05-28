@@ -9,15 +9,76 @@
 */
 
 #include <iostream>
+#include <string>
 using namespace std;
 
 #include "Texture.hpp"
 #include "VectorRange.hpp"
 
+#include "SequentialCounter.hpp"
 #include "FrameBuffer.hpp"
 #include "Random.hpp"
 #include "Utility.hpp"
 #include "Exception.hpp"
+
+string Convert(const vector<int> & output_size, Array<Position> & coord_array)
+{
+    coord_array = Array<Position>(output_size);
+
+    SequentialCounter counter(output_size.size(), vector<int>(output_size.size(), 0), Utility::Minus1(output_size));
+    
+    vector<int> index;
+    counter.Reset();
+        
+    do
+    {
+        counter.Get(index);
+
+        if(! coord_array.Put(index, index))
+        {
+            return "cannot put position";
+        }
+    }
+    while(counter.Next());
+
+    // done
+    return "";
+}
+
+string Convert(const Array<FrameBuffer::P3> & coord_image, Array<Position> & coord_array)
+{
+    const vector<int> output_size = coord_image.Size();
+    coord_array = Array<Position>(output_size);
+
+    SequentialCounter counter(output_size.size(), vector<int>(output_size.size(), 0), Utility::Minus1(output_size));
+    
+    FrameBuffer::P3 pixel;
+    Position position(2);
+    vector<int> index;
+    counter.Reset();
+        
+    do
+    {
+        counter.Get(index);
+      
+        if(! coord_image.Get(index, pixel))
+        {
+            return "cannot get pixel";
+        }
+
+        position[0] = pixel.r;
+        position[1] = pixel.g;
+
+        if(! coord_array.Put(index, position))
+        {
+            return "cannot put position";
+        }
+    }
+    while(counter.Next());
+
+    // done
+    return "";
+}
 
 int Main(int argc, char **argv)
 {
@@ -53,14 +114,26 @@ int Main(int argc, char **argv)
     const int dimension = input_texture.Dimension();
 
     // init coord
-    Array<FrameBuffer::P3> init_coord;
-    int max_coord_value = -1;
-    if(! FrameBuffer::ReadPPM(init_coord_spec, init_coord, max_coord_value))
+    Array<Position> init_coord;
     {
-        // verbatim input coordinates
+        Array<FrameBuffer::P3> init_coord_image;
+        int max_coord_value = -1;
 
-        init_coord = input_image;
-        vector<int> index;
+        string message;
+        if(FrameBuffer::ReadPPM(init_coord_spec, init_coord_image, max_coord_value))
+        {
+            message = Convert(init_coord_image, init_coord);
+        }
+        else
+        {
+            message = Convert(input_image.Size(), init_coord);
+        }
+    
+        if(message != "")
+        {
+            cerr << "error in converting coord image: " << message << endl;
+            return 1;
+        }
     }
 
     // domain and neighborhood
@@ -97,7 +170,7 @@ int Main(int argc, char **argv)
     Random::InitRandomNumberGenerator();
 
     // output texture
-    Texture output_texture(input_texture);
+    Texture output_texture(input_image, init_coord);
 
     // synthesis
     const string message = Utility::Synthesize(input_boundary, output_boundary, synthesis_spec, sequence_spec, neighborhood_spec, input_texture, output_texture, penalty_range, zero_range);

@@ -47,6 +47,11 @@ Texture::Texture(const Array<FrameBuffer::P3> & rgb_input) : Array<TexelPtr>(rgb
     Construct(rgb_input, init_coord);
 }
 
+Texture::Texture(const Array<FrameBuffer::P3> & rgb_input, const Array<Position> & init_coord) : Array<TexelPtr>(init_coord.Size())
+{
+    Construct(rgb_input, init_coord);
+}
+
 void Texture::Construct(const Array<FrameBuffer::P3> & rgb_input, const Array<Position> & init_coord)
 {
     if(rgb_input.Dimension() != init_coord.Dimension())
